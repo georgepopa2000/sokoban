@@ -14,7 +14,7 @@ import android.view.View;
 
 public class SokoBoardView extends View {
 	
-	private BoardState boardState;
+	private BoardMap boardState;
 	
 	
 	public SokoBoardView(Context context) {
@@ -33,7 +33,7 @@ public class SokoBoardView extends View {
 	}
 	
 	Paint p;
-	Bitmap wallBitmap,floorBitmap;
+	Bitmap wallBitmap,floorBitmap,doorBitmap;
 	Rect r;
 
 	private void init(AttributeSet attrs, int defStyle) {
@@ -41,6 +41,7 @@ public class SokoBoardView extends View {
 		p.setColor(Color.rgb(10, 18, 17));
 		wallBitmap =BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_wall);
 		floorBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_floor);
+		doorBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_door);
 		
 		r = new Rect(0,0,0,0);
 
@@ -66,10 +67,16 @@ public class SokoBoardView extends View {
 					r.set(size*i, size*j, size*i + size, size*j + size);
 					int state =boardState.getStateElement(i, j);
 					Bitmap b =null;
+					Bitmap bt = null;
 					if (state == StateElement.STATE_FLOOR) b = floorBitmap; else
-					if (state == StateElement.STATE_WALL) b = wallBitmap;
+					if (state == StateElement.STATE_WALL) b = wallBitmap; else 
+						if (state == StateElement.STATE_DOOR) {
+							b = wallBitmap;
+							bt = doorBitmap;
+						}
 					Log.d("xxx","bitmap is "+b);
 					if (b!= null) canvas.drawBitmap(b, null, r, null);
+					if (bt!= null) canvas.drawBitmap(bt, null, r, null);
 				}
 			}
 		}
@@ -90,7 +97,7 @@ public class SokoBoardView extends View {
 		return result;
 	}
 	
-	public void setBoardState(BoardState bs){
+	public void setBoardState(BoardMap bs){
 		this.boardState = bs;
 		this.invalidate();
 	}

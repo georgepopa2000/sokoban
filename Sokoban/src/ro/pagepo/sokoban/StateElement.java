@@ -4,6 +4,7 @@ public class StateElement {
 	public static final int STATE_WALL = 1;
 	public static final int STATE_EMPTY = 0;
 	public static final int STATE_FLOOR = 2;
+	public static final int STATE_DOOR = 3;
 	
 	int boardElementState = -1;
 

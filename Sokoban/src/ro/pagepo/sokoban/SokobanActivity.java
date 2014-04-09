@@ -61,7 +61,7 @@ public class SokobanActivity extends Activity {
 					false);
 			
 			SokoBoardView sbv = (SokoBoardView) rootView.findViewById(R.id.sokoBoardView1);
-				sbv.setBoardState(new BoardState());
+				sbv.setBoardState(new BoardMap());
 
 			return rootView;
 		}
