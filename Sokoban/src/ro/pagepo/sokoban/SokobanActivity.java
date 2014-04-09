@@ -2,14 +2,16 @@ package ro.pagepo.sokoban;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class SokobanActivity extends Activity {
 
@@ -60,8 +62,43 @@ public class SokobanActivity extends Activity {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 			
-			SokoBoardView sbv = (SokoBoardView) rootView.findViewById(R.id.sokoBoardView1);
-				sbv.setBoardState(new BoardMap());
+			final GameLevel gl = new GameLevel();
+			final SokoBoardView sbv = (SokoBoardView) rootView.findViewById(R.id.sokoBoardView1);
+			SimpleGestureFilter sgf = new SimpleGestureFilter(sbv, new SimpleGestureFilter.SimpleGestureListener() {
+				
+				@Override
+				public void onSwipe(int direction) {
+					Toast.makeText(getActivity(), "swipe "+direction, Toast.LENGTH_SHORT).show();
+				}
+				
+				@Override
+				public void onDoubleTap() {
+				}
+			});
+			
+				sbv.setGameLevel(gl);
+				
+				GestureListener.GestureCallbackInterface callback = new GestureListener.GestureCallbackInterface(){
+					@Override
+					public void onSwipe(int swipeMode) {
+						gl.move(swipeMode);
+						sbv.invalidate();
+					}
+				}; 
+				
+				final GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureListener(callback));
+				 
+		        sbv.setOnTouchListener(new OnTouchListener() {
+		            public boolean onTouch(View v, MotionEvent event) {
+		 
+		                if (gestureDetector.onTouchEvent(event)) {
+		                    return true;
+		                }
+		                return false;
+		            }
+		        });				
+				
+				
 
 			return rootView;
 		}
