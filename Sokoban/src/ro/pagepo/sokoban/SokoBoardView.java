@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 
@@ -32,20 +31,19 @@ public class SokoBoardView extends View{
 		init(attrs, defStyle);
 	}
 	
-	Paint p,xx;
-	Bitmap wallBitmap,floorBitmap,doorBitmap,pakBitmap,brickBitmap;
+	Paint p;
+	Bitmap wallBitmap,floorBitmap,doorBitmap,pakBitmap,brickBitmap,doorBrickBitmap;
 	Rect r;
 
 	private void init(AttributeSet attrs, int defStyle) {
 		p=new Paint(Paint.ANTI_ALIAS_FLAG);
 		p.setColor(Color.rgb(10, 18, 17));
-		xx=new Paint(Paint.ANTI_ALIAS_FLAG);
-		xx.setColor(Color.rgb(255, 0, 0));
 		wallBitmap =BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_wall);
 		floorBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_floor);
 		doorBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_door);
 		pakBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_pak);
 		brickBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_brick);
+		doorBrickBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_door_brick);
 		
 		r = new Rect(0,0,0,0);
 
@@ -70,8 +68,8 @@ public class SokoBoardView extends View{
 		if (gameLevel!=null){
 			BoardState boardState = gameLevel.getCurrentBoardState();
 			BoardMap boardMap = gameLevel.getBoardMap();
-			for (int i=0;i<=15;i++){
-				for (int j=0;j<=15;j++){
+			for (int i=0;i<boardMap.getSizeX();i++){
+				for (int j=0;j<boardMap.getSizeY();j++){
 					r.set(size*i, size*j, size*i + size, size*j + size);
 					
 					int state =boardMap.getStateElement(i, j);
@@ -84,7 +82,7 @@ public class SokoBoardView extends View{
 							bt = doorBitmap;
 						}
 					
-					if (b!= null) {canvas.drawRect(r, xx);canvas.drawBitmap(b, null, r, null);}
+					if (b!= null) {canvas.drawBitmap(b, null, r, null);}
 					if (bt!= null) canvas.drawBitmap(bt, null, r, null);
 				}
 			}
@@ -94,7 +92,7 @@ public class SokoBoardView extends View{
 				int y = boardState.getBrickPositionYAt(i);
 				int state =boardMap.getStateElement(x, y);
 				r.set(size*x, size*y, size*x + size, size*y + size);
-				if (state == StateElement.STATE_DOOR)	 canvas.drawBitmap(brickBitmap, null, r, null); 
+				if (state == StateElement.STATE_DOOR)	 canvas.drawBitmap(doorBrickBitmap, null, r, null); 
 					else canvas.drawBitmap(brickBitmap, null, r, null);
 			}
 			int x = boardState.getPakPositionX();
@@ -129,8 +127,9 @@ public class SokoBoardView extends View{
 	 * gets the size of one brick 
 	 * @return size in pixels
 	 */
-	public int getBrickSize(){
-		return (int) Math.round(((double)getWidth())/16);
+	public int getBrickSize(){		
+		int maxTiles = Math.max(gameLevel.getBoardMap().getSizeX(),gameLevel.getBoardMap().getSizeY());
+		return (int) Math.round(((double)getWidth())/maxTiles);
 	}
 	
 }

@@ -24,6 +24,10 @@ public class GameLevel {
 		return boardMap;
 	}
 	
+	public StateManager getStateManager(){
+		return stateManager;
+	}
+	
 	public void move(int mode){
 		BoardState bs = stateManager.getCurrentState();
 		bs = bs.move(mode);

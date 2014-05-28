@@ -33,7 +33,7 @@ public class StateManager {
 	}
 	
 	public boolean canRedo(){
-		return redoStack.isEmpty();
+		return !redoStack.isEmpty();
 	}
 	
 	public BoardState undo(){
@@ -41,5 +41,9 @@ public class StateManager {
 		redoStack.push(currentState);
 		currentState = undoStack.pop();
 		return currentState;
+	}
+	
+	public boolean canUndo(){
+		return !undoStack.isEmpty();
 	}
 }

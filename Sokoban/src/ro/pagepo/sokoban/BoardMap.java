@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 //contains map of the board
 public class BoardMap {
-	String string = "xxxxxppppppxxxxxzzzzzzpppzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxxxzzzxxx";
+	String string = "xxxxxppppppxxxxxzzzzzzpppzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxpppppxxx";
 
 	ArrayList<ArrayList<StateElement>> al ;
 	public BoardMap() {
 		al = new ArrayList<ArrayList<StateElement>>();
-		ArrayList<StateElement> alRow ;
+		ArrayList<StateElement> alRow;
 		
 		int row =0;int column =0;
 		for (int i=0;i<string.length();i++){
