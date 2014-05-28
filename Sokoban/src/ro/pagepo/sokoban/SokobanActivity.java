@@ -3,6 +3,7 @@ package ro.pagepo.sokoban;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,39 +65,47 @@ public class SokobanActivity extends Activity {
 			
 			final GameLevel gl = new GameLevel();
 			final SokoBoardView sbv = (SokoBoardView) rootView.findViewById(R.id.sokoBoardView1);
-			SimpleGestureFilter sgf = new SimpleGestureFilter(sbv, new SimpleGestureFilter.SimpleGestureListener() {
-				
-				@Override
-				public void onSwipe(int direction) {
-					Toast.makeText(getActivity(), "swipe "+direction, Toast.LENGTH_SHORT).show();
-				}
-				
-				@Override
-				public void onDoubleTap() {
-				}
-			});
-			
+		
 				sbv.setGameLevel(gl);
 				
-				GestureListener.GestureCallbackInterface callback = new GestureListener.GestureCallbackInterface(){
+		        sbv.setOnTouchListener(new View.OnTouchListener() {
+					float origx,origy;
+					float dif = Math.max(50,sbv.getBrickSize());
 					@Override
-					public void onSwipe(int swipeMode) {
-						gl.move(swipeMode);
-						sbv.invalidate();
+					public boolean onTouch(View v, MotionEvent event) {
+						if (event.getAction()==MotionEvent.ACTION_DOWN){
+							origx = event.getAxisValue(MotionEvent.AXIS_X);
+							origy = event.getAxisValue(MotionEvent.AXIS_Y);
+							return true;
+						} else 
+							if (event.getAction() == MotionEvent.ACTION_UP){
+							} else 
+								if (event.getAction() == MotionEvent.ACTION_MOVE){	
+									int action = 0;
+									float offsetx = origx-event.getAxisValue(MotionEvent.AXIS_X);
+									if (Math.abs(offsetx) > dif){
+										if (offsetx > 0) action = BoardState.MOVE_LEFT;
+											else action = BoardState.MOVE_RIGHT;
+										origx = event.getAxisValue(MotionEvent.AXIS_X);
+									}
+									float offsety = origy-event.getAxisValue(MotionEvent.AXIS_Y);
+									if (Math.abs(offsety) > dif){
+										if (offsety > 0) action = BoardState.MOVE_TOP;
+											else action = BoardState.MOVE_BOTTOM;
+										origy = event.getAxisValue(MotionEvent.AXIS_Y);
+									}							
+									if (action != 0 ){
+										if (!gl.canMove(action)) Log.d("xxx", "no can do mister"); else 
+										{
+										gl.move(action);
+										sbv.invalidate();
+										}
+									}
+									//return true;
+								}
+						return false;
 					}
-				}; 
-				
-				final GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureListener(callback));
-				 
-		        sbv.setOnTouchListener(new OnTouchListener() {
-		            public boolean onTouch(View v, MotionEvent event) {
-		 
-		                if (gestureDetector.onTouchEvent(event)) {
-		                    return true;
-		                }
-		                return false;
-		            }
-		        });				
+				});				
 				
 				
 

@@ -8,5 +8,11 @@ public class PositionCoordinates {
 		this.y = y;
 	}
 	
-	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof PositionCoordinates)) return false;
+		PositionCoordinates po = (PositionCoordinates) o;
+		if ((po.x ==x)&&(po.y == y)) return true; 
+		return false;
+	}
 }

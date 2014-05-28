@@ -98,4 +98,51 @@ public class BoardState {
 		return newBoardState;
 	}
 	
+	/**
+	 * check if the pak can move to the moveType direction
+	 * @param moveType int can be move_left, move_right, move_top, move_bottom
+	 * @return true if there aren't two bricks in front of the pak to block the move
+	 */
+	public boolean canMove(int moveType){
+		int offsetx = 0;
+		int offsetxx = 0;
+		int offsety = 0;
+		int offsetyy = 0;
+		switch (moveType){
+		case MOVE_LEFT:
+			offsetx = -1;
+			offsetxx = -2; 
+			break;
+		case MOVE_RIGHT:
+			offsetx = 1;
+			offsetxx = 2;
+			break;
+		case MOVE_TOP:
+			offsety = -1;
+			offsetyy = -2;
+			break;
+		case MOVE_BOTTOM:
+			offsety = 1;
+			offsetyy = 2;
+			break;
+	}
+		if (isBrickAt(new PositionCoordinates(pakPosition.x+offsetx, pakPosition.y+offsety))){
+			if (isBrickAt(new PositionCoordinates(pakPosition.x+offsetxx, pakPosition.y+offsetyy))){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * checks if there's a brick at the given position
+	 * @param position PositionCoordinates to check if there's a brick there
+	 * @return true if there's a brick at the position coordinates false otherwise
+	 */
+	public boolean isBrickAt(PositionCoordinates position){
+		if (brickList.indexOf(position)>=0) return true;
+		return false;
+	}
+	
 }

@@ -1,6 +1,5 @@
 package ro.pagepo.sokoban;
 
-import ro.pagepo.sokoban.SimpleGestureFilter.SimpleGestureListener;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 
 public class SokoBoardView extends View{
@@ -66,9 +63,9 @@ public class SokoBoardView extends View{
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		int size = (int) Math.round(((double)getWidth())/16);	
-		Log.d("xxx",getWidth()+"");
-		Log.d("xxx", size+"");
+		int size = getBrickSize();	
+		//Log.d("xxx",getWidth()+"");
+		//Log.d("xxx", size+"");
 		canvas.drawColor(p.getColor());
 		if (gameLevel!=null){
 			BoardState boardState = gameLevel.getCurrentBoardState();
@@ -124,6 +121,14 @@ public class SokoBoardView extends View{
 	public void setGameLevel(GameLevel gl){
 		this.gameLevel = gl;
 		this.invalidate();
+	}
+	
+	/**
+	 * gets the size of one brick 
+	 * @return size in pixels
+	 */
+	public int getBrickSize(){
+		return (int) Math.round(((double)getWidth())/16);
 	}
 	
 }
