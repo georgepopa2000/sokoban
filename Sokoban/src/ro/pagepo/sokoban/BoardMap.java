@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //contains map of the board
 public class BoardMap {
-	String string = "xxxxxxxxxxxxxxxxzzzzzzzzzzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxzzzzzxxx";
+	String string = "xxxxxppppppxxxxxzzzzzzpppzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxxxzzzxxx";
 
 	ArrayList<ArrayList<StateElement>> al ;
 	public BoardMap() {
@@ -34,5 +34,26 @@ public class BoardMap {
 	
 	public int getStateElement(int i,int j){
 		return al.get(i).get(j).getBoardElementState();
+	}
+	
+	/**
+	 * get size x of the board
+	 * @return the count of the horizontal elements
+	 */
+	public int getSizeX(){
+		return al.size();
+	}
+	
+	/**
+	 * get size y of the board
+	 * @return the max count of the vertical elements
+	 */	
+	public int getSizeY(){
+		int max = 0;
+		for (int i=0;i<al.size();i++){
+			ArrayList<StateElement> alx = al.get(i);
+			if (alx.size() > max) max = alx.size();					
+		}		
+		return max;
 	}
 }

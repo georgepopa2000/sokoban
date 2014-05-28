@@ -38,6 +38,48 @@ public class GameLevel {
 	public boolean canMove(int mode){
 		BoardState bs = stateManager.getCurrentState();
 		if (!bs.canMove(mode)) return false;
+		int offsetx = 0;
+		int offsetxx = 0;
+		int offsety = 0;
+		int offsetyy = 0;
+		switch (mode){
+		case BoardState.MOVE_LEFT:
+			offsetx = -1;
+			offsetxx = -2; 
+			break;
+		case BoardState.MOVE_RIGHT:
+			offsetx = 1;
+			offsetxx = 2;
+			break;
+		case BoardState.MOVE_TOP:
+			offsety = -1;
+			offsetyy = -2;
+			break;
+		case BoardState.MOVE_BOTTOM:
+			offsety = 1;
+			offsetyy = 2;
+			break;
+		}
+		
+		//wants to exit the table board
+		if ((bs.getPakPositionX()+offsetx<0)||(bs.getPakPositionY()+offsety<0)||(bs.getPakPositionX()+offsetx>=boardMap.getSizeX())||(bs.getPakPositionY()+offsety>=boardMap.getSizeY())) return false; 
+		
+		//state of the board element near
+		int state = boardMap.getStateElement(bs.getPakPositionX()+offsetx, bs.getPakPositionY()+offsety);
+		
+		//if has wall or empty space
+		if ((state == StateElement.STATE_WALL)||(state==StateElement.STATE_EMPTY)) return false;
+		
+		//if has brick
+		if (bs.isBrickAt(new PositionCoordinates(bs.getPakPositionX()+offsetx, bs.getPakPositionY()+offsety))){
+			//wants to exit the table board
+			if ((bs.getPakPositionX()+offsetxx<0)||(bs.getPakPositionY()+offsetyy<0)||(bs.getPakPositionX()+offsetxx>=boardMap.getSizeX())||(bs.getPakPositionY()+offsetyy>=boardMap.getSizeY())) return false;
+			//state of the board element second near
+			int statex = boardMap.getStateElement(bs.getPakPositionX()+offsetxx, bs.getPakPositionY()+offsetyy);			
+			if ((statex == StateElement.STATE_WALL)||(statex==StateElement.STATE_EMPTY)) return false;
+		}
+		
+		
 		return true;
 	}
 	

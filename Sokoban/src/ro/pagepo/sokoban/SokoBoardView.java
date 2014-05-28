@@ -92,8 +92,10 @@ public class SokoBoardView extends View{
 			for (int i=0;i<boardState.countBricks();i++){
 				int x = boardState.getBrickPositionXAt(i);
 				int y = boardState.getBrickPositionYAt(i);
+				int state =boardMap.getStateElement(x, y);
 				r.set(size*x, size*y, size*x + size, size*y + size);
-				canvas.drawBitmap(brickBitmap, null, r, null);
+				if (state == StateElement.STATE_DOOR)	 canvas.drawBitmap(brickBitmap, null, r, null); 
+					else canvas.drawBitmap(brickBitmap, null, r, null);
 			}
 			int x = boardState.getPakPositionX();
 			int y = boardState.getPakPositionY();
