@@ -94,7 +94,6 @@ public class SokobanLevelFragment extends Fragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		Log.d("xxxx","oncreatemenu");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		inflater.inflate(R.menu.level_sokoban, menu);
 		super.onCreateOptionsMenu(menu, inflater);
