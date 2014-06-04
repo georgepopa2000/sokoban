@@ -1,5 +1,9 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.activities;
 
+import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.R.id;
+import ro.pagepo.sokoban.R.layout;
+import ro.pagepo.sokoban.fragment.SokobanLevelFragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;

@@ -1,4 +1,10 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.levels;
+
+import ro.pagepo.sokoban.map.BoardMap;
+import ro.pagepo.sokoban.map.PositionCoordinates;
+import ro.pagepo.sokoban.map.state.BoardState;
+import ro.pagepo.sokoban.map.state.StateElement;
+import ro.pagepo.sokoban.map.state.StateManager;
 
 //should contain map, state, state manager
 public class GameLevel {
@@ -87,4 +93,18 @@ public class GameLevel {
 		return true;
 	}
 	
+	/**
+	 * check if the level is solved
+	 * @return true if every door has a brick
+	 */
+	public boolean isLevelFinished(){
+		for (int i =0; i< this.getBoardMap().getSizeX();i++){
+			for (int j=0; j<this.getBoardMap().getSizeY();j++){
+				if (this.getBoardMap().getStateElement(i, j) == StateElement.STATE_DOOR){
+					if (!this.getCurrentBoardState().isBrickAt(new PositionCoordinates(i, j))) return false;
+				}
+			}
+		}
+		return true;
+	}
 }

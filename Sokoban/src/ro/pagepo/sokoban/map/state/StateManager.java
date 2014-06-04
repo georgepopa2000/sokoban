@@ -1,6 +1,7 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.map.state;
 
 import java.util.Stack;
+
 
 //undo redo mechanism and current board state
 public class StateManager {

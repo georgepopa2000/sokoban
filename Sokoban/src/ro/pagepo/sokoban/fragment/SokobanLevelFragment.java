@@ -1,6 +1,16 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.fragment;
 
+import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.R.id;
+import ro.pagepo.sokoban.R.layout;
+import ro.pagepo.sokoban.R.menu;
+import ro.pagepo.sokoban.fragment.view.SokoBoardView;
+import ro.pagepo.sokoban.levels.GameLevel;
+import ro.pagepo.sokoban.map.state.BoardState;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,6 +89,9 @@ public class SokobanLevelFragment extends Fragment {
 									{
 									gl.move(action);
 									sbv.invalidate();
+									if (gl.isLevelFinished()){
+										showFinishedDialog();
+									}
 									}
 								}
 								//return true;
@@ -125,6 +138,21 @@ public class SokobanLevelFragment extends Fragment {
 			return true;
 		}		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void showFinishedDialog(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		builder.setMessage("Victory! You solved it! Oauu! I can't believe it!")
+		.setTitle("Level Solved")
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				
+			}
+		});
+		builder.create().show();
 	}
 	
 }

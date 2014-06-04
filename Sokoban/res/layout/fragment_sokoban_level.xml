@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ro.pagepo.sokoban.SokobanLevelFragment" >
+    tools:context="ro.pagepo.sokoban.fragment.SokobanLevelFragment" >
 
     <!-- TODO: Update blank fragment layout -->
 

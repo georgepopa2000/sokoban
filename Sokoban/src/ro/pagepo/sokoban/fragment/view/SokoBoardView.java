@@ -1,5 +1,11 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.fragment.view;
 
+import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.R.drawable;
+import ro.pagepo.sokoban.levels.GameLevel;
+import ro.pagepo.sokoban.map.BoardMap;
+import ro.pagepo.sokoban.map.state.BoardState;
+import ro.pagepo.sokoban.map.state.StateElement;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

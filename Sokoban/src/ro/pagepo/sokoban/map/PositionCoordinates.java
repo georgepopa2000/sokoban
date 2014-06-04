@@ -1,4 +1,4 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.map;
 
 public class PositionCoordinates {
 	public int x;

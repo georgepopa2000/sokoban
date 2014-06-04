@@ -1,4 +1,4 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.map.state;
 
 public class StateElement {
 	public static final int STATE_WALL = 1;

@@ -1,6 +1,8 @@
-package ro.pagepo.sokoban;
+package ro.pagepo.sokoban.map.state;
 
 import java.util.ArrayList;
+
+import ro.pagepo.sokoban.map.PositionCoordinates;
 
 import android.util.Log;
 
