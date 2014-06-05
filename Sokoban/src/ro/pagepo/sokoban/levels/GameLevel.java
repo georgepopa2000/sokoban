@@ -16,9 +16,9 @@ public class GameLevel {
 		boardMap = new BoardMap();
 		stateManager = new StateManager();
 		BoardState bs = new BoardState();
-		bs.addBrick(3, 3);
-		bs.addBrick(4, 4);
-		bs.setPakPosition(5, 5);
+		bs.addBrick(2, 7);
+		bs.addBrick(4, 6);
+		bs.setPakPosition(4, 5);
 		stateManager.setCurrentState(bs);
 	}
 	

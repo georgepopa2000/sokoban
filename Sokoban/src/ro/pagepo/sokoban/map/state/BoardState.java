@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import ro.pagepo.sokoban.map.PositionCoordinates;
 
-import android.util.Log;
-
 //should contain the board state at one moment
 public class BoardState {
 	ArrayList<PositionCoordinates> brickList = new ArrayList<PositionCoordinates>();	
