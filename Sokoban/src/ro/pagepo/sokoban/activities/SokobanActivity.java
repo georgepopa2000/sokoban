@@ -2,6 +2,7 @@ package ro.pagepo.sokoban.activities;
 
 import ro.pagepo.sokoban.R;
 import ro.pagepo.sokoban.fragment.SokobanLevelFragment;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -19,6 +20,10 @@ public class SokobanActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, f).commit();
 		}
+		
+		ActionBar actionBar = getActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    actionBar.setDisplayShowTitleEnabled(false);
 		
 	}
 	

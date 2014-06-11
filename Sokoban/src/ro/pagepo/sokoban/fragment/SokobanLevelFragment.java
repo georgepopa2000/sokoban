@@ -1,13 +1,16 @@
 package ro.pagepo.sokoban.fragment;
 
 import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.activities.StartActivity;
 import ro.pagepo.sokoban.fragment.view.SokoBoardView;
 import ro.pagepo.sokoban.levels.GameLevel;
 import ro.pagepo.sokoban.map.state.BoardState;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +39,7 @@ public class SokobanLevelFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		if (getArguments() != null) {
 			//mParam1 = getArguments().getString(ARG_PARAM1);
 			//mParam2 = getArguments().getString(ARG_PARAM2);
@@ -84,10 +88,11 @@ public class SokobanLevelFragment extends Fragment {
 									if (gl.canMove(action))  
 									{
 									gl.move(action);
-									sbv.invalidate();
+									sbv.invalidate();									
 									if (gl.isLevelFinished()){
 										showFinishedDialog();
 									}
+									getActivity().invalidateOptionsMenu();
 									}
 								}
 								//return true;
@@ -108,6 +113,14 @@ public class SokobanLevelFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		MenuItem mi = menu.findItem(R.id.action_redo);
+		mi.setEnabled(gl.getStateManager().canRedo());
+		mi = menu.findItem(R.id.action_back);
+		mi.setEnabled(gl.getStateManager().canUndo());		
+		super.onPrepareOptionsMenu(menu);
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -115,6 +128,14 @@ public class SokobanLevelFragment extends Fragment {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+    /*/ 
+		if (id == android.R.id.home) {
+        // app icon in action bar clicked; go home
+        Intent intentHome = new Intent(this.getActivity(), StartActivity.class);
+        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intentHome);
+        return true;		
+    } //*/
 		if (id == R.id.action_exit) {
 			this.getActivity().finish();
 			return true;
@@ -123,6 +144,7 @@ public class SokobanLevelFragment extends Fragment {
 			if (gl.getStateManager().canUndo()){
 				gl.getStateManager().undo();
 				sbv.invalidate();
+				getActivity().invalidateOptionsMenu();
 			}
 			return true;
 		}		
@@ -130,13 +152,14 @@ public class SokobanLevelFragment extends Fragment {
 			if (gl.getStateManager().canRedo()){
 				gl.getStateManager().redo();
 				sbv.invalidate();
+				getActivity().invalidateOptionsMenu();
 			}
 			return true;
 		}		
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void showFinishedDialog(){
+	public void showFinishedDialog(){		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setMessage("Victory! You solved it! Oauu! I can't believe it!")
 		.setTitle("Level Solved")

@@ -18,7 +18,7 @@ public class StateManager {
 	
 	public void setCurrentState(BoardState state){
 		if (currentState!=null) undoStack.push(currentState);
-		redoStack.empty();
+		redoStack.clear();
 		currentState = state;
 	}
 	
