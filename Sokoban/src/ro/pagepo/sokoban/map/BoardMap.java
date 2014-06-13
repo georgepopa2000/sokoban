@@ -2,21 +2,26 @@ package ro.pagepo.sokoban.map;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
+import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.map.state.StateElement;
 
 //contains map of the board
 public class BoardMap {
-	String string = "xxxxxppppppxxxxxzzzzzzpppzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxpppppxxx";
+	//String string = "xxxxxppppppxxxxxzzzzzzpppzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxpppppxxx";
 
 	ArrayList<ArrayList<StateElement>> al ;
-	public BoardMap() {
+	public BoardMap(Level level) {
 		al = new ArrayList<ArrayList<StateElement>>();
 		ArrayList<StateElement> alRow;
 		
+		String string = level.getContent(); 
+		
 		int row =0;int column =0;
 		for (int i=0;i<string.length();i++){
-			column = i%16;
-			row = i/16;
+			column = i%level.getWidth();
+			row = i/level.getWidth();
 			if (column == 0){
 				alRow = new ArrayList<StateElement>();
 				al.add(alRow);
@@ -24,14 +29,15 @@ public class BoardMap {
 			
 			
 			int state = -1;
-			if (string.substring(i, i+1).equals("x")) state = StateElement.STATE_EMPTY; else
-				if (string.substring(i, i+1).equals("z")) state = StateElement.STATE_WALL; else
-					if (string.substring(i, i+1).equals("f")) state = StateElement.STATE_DOOR; else
-						if (string.substring(i, i+1).equals("p")) state = StateElement.STATE_FLOOR;
+			if (string.substring(i, i+1).equals("xxx ")) state = StateElement.STATE_EMPTY; else
+				if (string.substring(i, i+1).equals("#")) state = StateElement.STATE_WALL; else
+					if ((string.substring(i, i+1).equals("."))||(string.substring(i, i+1).equals("+"))||(string.substring(i, i+1).equals("*"))) state = StateElement.STATE_DOOR; else
+						if (string.substring(i, i+1).equals(" ")||(string.substring(i, i+1).equals("@"))||(string.substring(i, i+1).equals("$"))) state = StateElement.STATE_FLOOR;
 			
 			al.get(row).add(new StateElement(state));
 			
 		}
+		Log.d("asdasd",row+" "+column);
 	}
 	
 	public int getStateElement(int i,int j){

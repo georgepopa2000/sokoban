@@ -1,7 +1,14 @@
 package ro.pagepo.sokoban.database.model;
 
-public class Level {
+import java.io.Serializable;
 
+public class Level implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7417981866768281245L;
+	
 	long id; //database id
 	long pack_id; //levels pack id
 	String name;
@@ -102,6 +109,11 @@ public class Level {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 	
 		

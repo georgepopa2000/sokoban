@@ -1,21 +1,26 @@
 package ro.pagepo.sokoban.activities;
 
-import java.util.Iterator;
-import java.util.List;
-
 import ro.pagepo.sokoban.R;
 import ro.pagepo.sokoban.database.LevelsDataSource;
+import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.database.model.LevelsPack;
 import ro.pagepo.sokoban.levels.ImportLevelsPack;
+import ro.pagepo.sokoban.levels.LevelsManager;
+import android.R.anim;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 public class StartActivity extends Activity {
@@ -105,15 +110,69 @@ public class StartActivity extends Activity {
 				}
 			});
 			
-			Button butss = (Button) rootView.findViewById(R.id.butNewGame);
-			butss.setOnClickListener(new View.OnClickListener() {
+			Button butNewHame = (Button) rootView.findViewById(R.id.butNewGame);
+			butNewHame.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
+					((StartActivity)(PlaceholderFragment.this.getActivity())).showDialogLevelsPack();
 				}
 			});
 			return rootView;
 		}
+	}
+	
+	protected void showDialogLevelsPack(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setCancelable(true)
+		.setTitle("Choose Level Pack")
+		.setAdapter(new ArrayAdapter<LevelsPack>(this, android.R.layout.simple_list_item_1, android.R.id.text1, LevelsManager.getInstance(StartActivity.this).getAllLevelsPack()), new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				LevelsPack lp = LevelsManager.getInstance(StartActivity.this).getAllLevelsPack().get(which);
+				StartActivity.this.showDialogLevels(lp);
+				Log.d("onclick", lp.getName()+" ");							
+			}
+			
+
+		})
+		.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();
+	}
+	
+	protected void showDialogLevels(LevelsPack lp){
+		final String lpName = lp.getName();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setCancelable(true)
+		.setTitle("Choose Level")
+		.setAdapter(new ArrayAdapter<Level>(this, android.R.layout.simple_list_item_1, android.R.id.text1, LevelsManager.getInstance().getAllLevelsFromPack(lp.getName())), new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//StartActivity.this.showDialogLevels(lp);
+				Intent intent = new Intent(StartActivity.this, SokobanActivity.class);
+				intent.putExtra(SokobanActivity.PUT_LEVEL, LevelsManager.getInstance().getAllLevelsFromPack(lpName).get(which));
+				intent.putExtra(SokobanActivity.PUT_LEVELPACK_NAME, lpName);		
+				StartActivity.this.startActivity(intent);
+			}
+			
+
+		})
+		.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();		
 	}
 	
 	@Override

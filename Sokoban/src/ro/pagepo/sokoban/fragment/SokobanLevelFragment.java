@@ -1,6 +1,8 @@
 package ro.pagepo.sokoban.fragment;
 
 import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.activities.SokobanActivity;
+import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.fragment.view.SokoBoardView;
 import ro.pagepo.sokoban.levels.GameLevel;
 import ro.pagepo.sokoban.map.state.BoardState;
@@ -20,15 +22,17 @@ public class SokobanLevelFragment extends Fragment {
 
 	GameLevel gl;
 	SokoBoardView sbv;
+	Level lvl;
+	String packName;
 	public SokobanLevelFragment() {
-		gl = new GameLevel();
+		
 	}
 	
-	public static SokobanLevelFragment newInstance() {
+	public static SokobanLevelFragment newInstance(Level lvl,String packName) {
 		SokobanLevelFragment fragment = new SokobanLevelFragment();
 		Bundle args = new Bundle();
-		//args.putString(ARG_PARAM1, param1);
-		//args.putString(ARG_PARAM2, param2);
+		args.putSerializable(SokobanActivity.PUT_LEVEL,lvl);
+		args.putString(SokobanActivity.PUT_LEVELPACK_NAME, packName);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -38,9 +42,10 @@ public class SokobanLevelFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		if (getArguments() != null) {
-			//mParam1 = getArguments().getString(ARG_PARAM1);
-			//mParam2 = getArguments().getString(ARG_PARAM2);
+			lvl = (Level) getArguments().getSerializable(SokobanActivity.PUT_LEVEL);
+			packName = getArguments().getString(SokobanActivity.PUT_LEVELPACK_NAME);
 		}
+		gl = new GameLevel(lvl);
 	}
 
 	@Override
@@ -57,6 +62,8 @@ public class SokobanLevelFragment extends Fragment {
 	        sbv.setOnTouchListener(new View.OnTouchListener() {
 				float origx,origy;
 				float dif = Math.max(50,sbv.getBrickSize());
+				
+				/*
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction()==MotionEvent.ACTION_DOWN){
@@ -96,6 +103,46 @@ public class SokobanLevelFragment extends Fragment {
 							}
 					return false;
 				}
+				//*/
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction()==MotionEvent.ACTION_DOWN){
+						origx = event.getAxisValue(MotionEvent.AXIS_X);
+						origy = event.getAxisValue(MotionEvent.AXIS_Y);
+						return true;
+					} else 
+						if (event.getAction() == MotionEvent.ACTION_UP){
+						} else 
+							if (event.getAction() == MotionEvent.ACTION_MOVE){	
+								int action = 0;
+								float offsetx = origx-event.getAxisValue(MotionEvent.AXIS_X);
+								if (Math.abs(offsetx) > dif){
+									if (offsetx > 0) action = BoardState.MOVE_TOP;
+										else action = BoardState.MOVE_BOTTOM;
+									origx = event.getAxisValue(MotionEvent.AXIS_X);
+								}
+								float offsety = origy-event.getAxisValue(MotionEvent.AXIS_Y);
+								if (Math.abs(offsety) > dif){
+									if (offsety > 0) action = BoardState.MOVE_LEFT;
+										else action = BoardState.MOVE_RIGHT;
+									origy = event.getAxisValue(MotionEvent.AXIS_Y);
+								}							
+								if (action != 0 ){
+									if (gl.isLevelFinished()) return true;
+									if (gl.canMove(action))  
+									{
+									gl.move(action);
+									sbv.invalidate();									
+									if (gl.isLevelFinished()){
+										showFinishedDialog();
+									}
+									getActivity().invalidateOptionsMenu();
+									}
+								}
+								//return true;
+							}
+					return false;
+				}				
 			});				
 			
 			

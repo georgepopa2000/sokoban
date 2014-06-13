@@ -13,8 +13,12 @@ import ro.pagepo.sokoban.database.model.LevelsPack;
 import ro.pagepo.sokoban.levels.exception.InvalidXMLLevelPackException;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.util.Log;
 
+/**
+ * Class to import levels pack files from the assest folder or an input file from user
+ * @author VS
+ *
+ */
 public class ImportLevelsPack {
 	
 	AssetManager am;
@@ -26,6 +30,9 @@ public class ImportLevelsPack {
 		this.datasource = new LevelsDataSource(context);		
 	}
 	
+	/**
+	 * import levels pack from the file existing in the folder assets/slc
+	 */
 	public void importLevelsFromAssets(){
 		try {
 			this.datasource.open();
@@ -42,6 +49,11 @@ public class ImportLevelsPack {
 		
 	}
 	
+	/**
+	 * import a level pack from an xml file from disk
+	 * @param filepath - path to the xml file to import
+	 * @throws InvalidXMLLevelPackException - if the file doesn't have the required format;
+	 */
 	public void importLevelsFromFile(String filepath) throws InvalidXMLLevelPackException{
 		try {
 			this.datasource.open();
@@ -52,6 +64,12 @@ public class ImportLevelsPack {
 		}
 	}
 	
+	/**
+	 * import level pack to database from an input stream
+	 * @param is - the input stream to import from
+	 * @param type - the type of the level pack can be <code>LevelsPack.TYPE_IMPORTED</code> or  <code>LevelsPack.TYPE_ORIGINAL</code>
+	 * @throws InvalidXMLLevelPackException - if the stream doesn't contain a properly XML file
+	 */
 	private void importLevelPackFromInputStream(InputStream is,int type) throws InvalidXMLLevelPackException{
 		ParseXMLLevelsPack plp = ParseXMLLevelsPack.parseDocument(is);
 		plp.getLevelsPack().setType(type);
@@ -62,7 +80,6 @@ public class ImportLevelsPack {
 		for (Iterator<Level> iterator = all.iterator(); iterator.hasNext();) {
 			Level level = (Level) iterator.next();
 			level.setPack_id(levelPackId);			
-			Log.d("contentlength",level.getContent().length()+" "+level.getWidth()*level.getHeight());
 			datasource.insertLevel(level);
 		}		
 	}

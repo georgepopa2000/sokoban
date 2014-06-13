@@ -1,6 +1,7 @@
 package ro.pagepo.sokoban.activities;
 
 import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.fragment.SokobanLevelFragment;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -12,14 +13,20 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 
 public class SokobanActivity extends Activity {
+	
+	public static final String PUT_LEVEL = "put_level";
+	public static final String PUT_LEVELPACK_NAME = "put_level_pack_name";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sokoban);
+		
+		Level lvl = (Level) getIntent().getSerializableExtra(PUT_LEVEL);
+		String packName = getIntent().getStringExtra(PUT_LEVELPACK_NAME);
 
 		if (savedInstanceState == null) {
-			Fragment f = SokobanLevelFragment.newInstance();
+			Fragment f = SokobanLevelFragment.newInstance(lvl,packName);
 			f.setHasOptionsMenu(true);
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, f).commit();

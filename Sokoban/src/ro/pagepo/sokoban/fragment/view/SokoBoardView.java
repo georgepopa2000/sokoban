@@ -75,7 +75,7 @@ public class SokoBoardView extends View{
 			BoardMap boardMap = gameLevel.getBoardMap();
 			for (int i=0;i<boardMap.getSizeX();i++){
 				for (int j=0;j<boardMap.getSizeY();j++){
-					r.set(size*i, size*j, size*i + size, size*j + size);
+					r.set(size*j, size*i, size*j + size, size*i + size);
 					
 					int state =boardMap.getStateElement(i, j);
 					Bitmap b =null;
@@ -96,13 +96,13 @@ public class SokoBoardView extends View{
 				int x = boardState.getBrickPositionXAt(i);
 				int y = boardState.getBrickPositionYAt(i);
 				int state =boardMap.getStateElement(x, y);
-				r.set(size*x, size*y, size*x + size, size*y + size);
+				r.set(size*y, size*x, size*y + size, size*x + size);
 				if (state == StateElement.STATE_DOOR)	 canvas.drawBitmap(doorBrickBitmap, null, r, null); 
 					else canvas.drawBitmap(brickBitmap, null, r, null);
 			}
 			int x = boardState.getPakPositionX();
 			int y = boardState.getPakPositionY();
-			r.set(size*x, size*y, size*x + size, size*y + size);
+			r.set(size*y, size*x, size*y + size, size*x + size);
 			canvas.drawBitmap(pakBitmap, null, r, null);			
 		}
 		

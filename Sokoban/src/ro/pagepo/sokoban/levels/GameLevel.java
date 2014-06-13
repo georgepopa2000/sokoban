@@ -1,5 +1,10 @@
 package ro.pagepo.sokoban.levels;
 
+import java.util.ArrayList;
+
+import android.util.Log;
+
+import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.map.BoardMap;
 import ro.pagepo.sokoban.map.PositionCoordinates;
 import ro.pagepo.sokoban.map.state.BoardState;
@@ -11,14 +16,26 @@ public class GameLevel {
 
 	StateManager stateManager;
 	BoardMap boardMap;
+	Level lvl;
 	
-	public GameLevel(){
-		boardMap = new BoardMap();
+	public GameLevel(Level level){
+		this.lvl = level;
+		boardMap = new BoardMap(level);
 		stateManager = new StateManager();
 		BoardState bs = new BoardState();
-		bs.addBrick(2, 7);
-		bs.addBrick(4, 6);
-		bs.setPakPosition(4, 5);
+		
+		String string = level.getContent(); 
+		
+		int row =0;int column =0;
+		for (int i=0;i<string.length();i++){
+			column = i%level.getWidth();
+			row = i/level.getWidth();
+			
+			if ((string.substring(i, i+1).equals("@"))||(string.substring(i, i+1).equals("+"))) {bs.setPakPosition(row,column);Log.d("pakpos",row+" "+column); }else
+				if ((string.substring(i, i+1).equals("$"))||(string.substring(i, i+1).equals("*"))) {bs.addBrick(row,column);Log.d("brickpos",row+" "+column);}
+			
+		}
+		
 		stateManager.setCurrentState(bs);
 	}
 	
