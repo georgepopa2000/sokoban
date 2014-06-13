@@ -1,22 +1,12 @@
 package ro.pagepo.sokoban.activities;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-
 import ro.pagepo.sokoban.R;
 import ro.pagepo.sokoban.database.LevelsDataSource;
-import ro.pagepo.sokoban.database.model.Level;
-import ro.pagepo.sokoban.database.model.LevelsPack;
-import ro.pagepo.sokoban.levels.ParseXMLLevelsPack;
-import ro.pagepo.sokoban.levels.exception.InvalidXMLLevelPackException;
+import ro.pagepo.sokoban.levels.ImportLevelsPackFromAssets;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,25 +28,9 @@ public class StartActivity extends Activity {
 		}
 		datasource = new LevelsDataSource(this);	
 		datasource.open();
-		
-		AssetManager am = getAssets();		
-		try {
-			String[] st = am.list("slc");			
-			for (int i = 0; i < st.length; i++) {
-				InputStream is = am.open("slc/"+st[i]);
-				ParseXMLLevelsPack ils = ParseXMLLevelsPack.parseDocument(is); 
-				
-				break;
-				//Log.i("xxx", st[i]);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidXMLLevelPackException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
+		ImportLevelsPackFromAssets il = new ImportLevelsPackFromAssets(this);
+		il.importLevels();
 		
 		/*
 		long idlp = datasource.insertLevelPack(new LevelsPack("original"));

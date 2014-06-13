@@ -109,6 +109,16 @@ public class ParseXMLLevelsPack {
 		while (newStr.length()<size) newStr+=" ";
 		return newStr;
 	}
+
+	public LevelsPack getLevelsPack() {
+		return lp;
+	}
+
+	public ArrayList<Level> getListLevels() {
+		return listLevels;
+	}
+	
+	
 	
 	
 }
