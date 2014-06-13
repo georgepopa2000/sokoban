@@ -1,8 +1,12 @@
 package ro.pagepo.sokoban.activities;
 
+import java.util.Iterator;
+import java.util.List;
+
 import ro.pagepo.sokoban.R;
 import ro.pagepo.sokoban.database.LevelsDataSource;
-import ro.pagepo.sokoban.levels.ImportLevelsPackFromAssets;
+import ro.pagepo.sokoban.database.model.LevelsPack;
+import ro.pagepo.sokoban.levels.ImportLevelsPack;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -29,8 +33,8 @@ public class StartActivity extends Activity {
 		datasource = new LevelsDataSource(this);	
 		datasource.open();
 
-		ImportLevelsPackFromAssets il = new ImportLevelsPackFromAssets(this);
-		il.importLevels();
+		ImportLevelsPack il = new ImportLevelsPack(this);
+		il.importLevelsFromAssets();
 		
 		/*
 		long idlp = datasource.insertLevelPack(new LevelsPack("original"));

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import ro.pagepo.sokoban.database.helper.SQLDatabaseHelper;
 import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.database.model.LevelsPack;
