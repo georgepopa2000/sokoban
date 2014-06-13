@@ -1,10 +1,16 @@
 package ro.pagepo.sokoban.activities;
 
+import java.util.Iterator;
+import java.util.List;
+
 import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.database.LevelsDataSource;
+import ro.pagepo.sokoban.database.model.LevelsPack;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +20,7 @@ import android.widget.Button;
 
 public class StartActivity extends Activity {
 
+	LevelsDataSource datasource;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,6 +30,20 @@ public class StartActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		datasource = new LevelsDataSource(this);	
+		datasource.open();
+		
+		datasource.insertLevelPack(new LevelsPack("original"));
+		//datasource.insertLevelPack(new LevelsPack("original + extra"));
+		
+		List<LevelsPack> llp = datasource.getAllLevelsPack();
+		String tot = new String();
+		for (Iterator<LevelsPack> iterator = llp.iterator(); iterator.hasNext();) {
+			LevelsPack levelsPack = iterator.next();
+			tot+=levelsPack.getName()+" ";
+			datasource.deleteLevelPack(levelsPack.getId());
+		}
+		Log.d("xxxxxx",tot+"asd");
 	}
 
 	@Override
@@ -72,11 +93,22 @@ public class StartActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					//PlaceholderFragment.this.startActivity(new Intent(PlaceholderFragment.this.getActivity(), AActivity.class));
 				}
 			});
 			return rootView;
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		datasource.open();
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		datasource.close();
+		super.onPause();
 	}
 
 }
