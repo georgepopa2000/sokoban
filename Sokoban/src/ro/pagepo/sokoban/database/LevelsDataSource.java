@@ -67,6 +67,22 @@ public class LevelsDataSource {
 		cursor.close();
 		return lp;
 	}
+
+	/**
+	 * get the level pack with a specific name
+	 * @param name - the name of the level pack to be returned
+	 * @return returns an instance of LevelsPack populated with the value in the database or null if name doesn't exists
+	 */	
+	public LevelsPack getLevelPackByName(String name){
+		Cursor cursor = database.query(SQLDatabaseHelper.TABLE_LEVELSPACK, null, SQLDatabaseHelper.KEY_LP_NAME +" = '"+ name + "'", null, null, null, null);		
+		cursor.moveToFirst();
+		if (cursor.isAfterLast()) return null;
+		LevelsPack lp = new LevelsPack(cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_ID)), 
+				cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LP_NAME)), 
+				cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LP_TYPE)));
+		cursor.close();
+		return lp;
+	}
 	
 	/**
 	 * gets all the levels pack in the database 

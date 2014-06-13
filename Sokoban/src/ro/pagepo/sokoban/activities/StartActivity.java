@@ -1,14 +1,20 @@
 package ro.pagepo.sokoban.activities;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
 import ro.pagepo.sokoban.R;
 import ro.pagepo.sokoban.database.LevelsDataSource;
+import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.database.model.LevelsPack;
+import ro.pagepo.sokoban.levels.ParseXMLLevelsPack;
+import ro.pagepo.sokoban.levels.exception.InvalidXMLLevelPackException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,8 +39,40 @@ public class StartActivity extends Activity {
 		datasource = new LevelsDataSource(this);	
 		datasource.open();
 		
-		datasource.insertLevelPack(new LevelsPack("original"));
-		//datasource.insertLevelPack(new LevelsPack("original + extra"));
+		AssetManager am = getAssets();		
+		try {
+			String[] st = am.list("slc");			
+			for (int i = 0; i < st.length; i++) {
+				InputStream is = am.open("slc/"+st[i]);
+				ParseXMLLevelsPack ils = ParseXMLLevelsPack.parseDocument(is); 
+				
+				break;
+				//Log.i("xxx", st[i]);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidXMLLevelPackException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*
+		long idlp = datasource.insertLevelPack(new LevelsPack("original"));
+		Object o = datasource.getLevelPackById(idlp);
+		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");
+		o = datasource.getLevelPackById(idlp+1);
+		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");
+		o = datasource.getLevelPackByName("original");
+		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");
+		o = datasource.getLevelPackByName("original1");
+		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");		
+		
+		
+		datasource.insertLevel(new Level(idlp, "aaaa", 0, 10, 10, "aaaaa"));
+		datasource.insertLevel(new Level(idlp, "aaaa1", 0, 10, 10, "aaaaa1"));
+		datasource.insertLevelPack(new LevelsPack("original + extra"));
 		
 		List<LevelsPack> llp = datasource.getAllLevelsPack();
 		String tot = new String();
@@ -43,7 +81,8 @@ public class StartActivity extends Activity {
 			tot+=levelsPack.getName()+" ";
 			datasource.deleteLevelPack(levelsPack.getId());
 		}
-		Log.d("xxxxxx",tot+"asd");
+		Log.d("xxxxxx",tot+"");
+		//*/
 	}
 
 	@Override

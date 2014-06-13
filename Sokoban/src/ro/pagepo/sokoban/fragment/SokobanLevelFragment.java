@@ -1,16 +1,13 @@
 package ro.pagepo.sokoban.fragment;
 
 import ro.pagepo.sokoban.R;
-import ro.pagepo.sokoban.activities.StartActivity;
 import ro.pagepo.sokoban.fragment.view.SokoBoardView;
 import ro.pagepo.sokoban.levels.GameLevel;
 import ro.pagepo.sokoban.map.state.BoardState;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

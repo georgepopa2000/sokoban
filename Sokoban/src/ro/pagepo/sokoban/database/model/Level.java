@@ -21,6 +21,8 @@ public class Level {
 	public Level() {
 		super();
 		this.id = -1;
+		this.solved = 0;
+		this.pack_id = -1;
 	}
 
 	public Level(long id, long pack_id, String name, int solved, int width,

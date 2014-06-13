@@ -11,10 +11,10 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper{
     private static final String LOG = "DatabaseHelper";
  
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
  
     // Database Name
-    private static final String DATABASE_NAME = "sokobanLevelsManager";
+    private static final String DATABASE_NAME = "sokobanLevelsManager.db";
     
     //tables names
     public static final String TABLE_LEVELSPACK = "levelspack";
@@ -49,7 +49,7 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper{
 			+ KEY_LVL_HEIGHT + " INTEGER,"
 			+ KEY_LVL_WIDTH + " INTEGER,"
 			+ KEY_LVL_CONTENT +" TEXT,"
-			+ "FOREIGN KEY("+KEY_PACK+") REFERENCES "+TABLE_LEVELSPACK+"("+KEY_ID+"))";
+			+ "FOREIGN KEY("+KEY_PACK+") REFERENCES "+TABLE_LEVELSPACK+"("+KEY_ID+") ON DELETE CASCADE)";
     
     
     
@@ -73,6 +73,15 @@ public class SQLDatabaseHelper extends SQLiteOpenHelper{
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LEVELSPACK);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LEVEL);
 		onCreate(db);
+	}
+	
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		super.onOpen(db);
+	    if (!db.isReadOnly()) {
+	        // Enable foreign key constraints
+	        db.execSQL("PRAGMA foreign_keys=ON;");
+	    }		
 	}
 	
 	
