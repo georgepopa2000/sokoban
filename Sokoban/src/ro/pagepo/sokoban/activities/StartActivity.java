@@ -1,16 +1,13 @@
 package ro.pagepo.sokoban.activities;
 
 import ro.pagepo.sokoban.R;
-import ro.pagepo.sokoban.activities.views.ExtendArrayAdapter;
+import ro.pagepo.sokoban.activities.views.LevelsChooserListAdapter;
 import ro.pagepo.sokoban.database.LevelsDataSource;
-import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.database.model.LevelsPack;
 import ro.pagepo.sokoban.levels.ImportLevelsPack;
 import ro.pagepo.sokoban.levels.LevelsManager;
-import android.R.anim;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -151,8 +148,8 @@ public class StartActivity extends Activity {
 	
 	protected void showDialogLevels(LevelsPack lp){
 		final String lpName = lp.getName();
-		ListAdapter la = new ArrayAdapter<Level>(this, android.R.layout.simple_list_item_1, android.R.id.text1, LevelsManager.getInstance().getAllLevelsFromPack(lp.getName()));
-		la= new ExtendArrayAdapter(this, R.layout.levels_list, LevelsManager.getInstance().getAllLevelsFromPack(lp.getName()));
+		ListAdapter la;		
+		la= new LevelsChooserListAdapter(this, android.R.layout.simple_list_item_1, LevelsManager.getInstance().getAllLevelsFromPack(lp.getName()));
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setCancelable(true)
 		.setTitle("Choose Level")

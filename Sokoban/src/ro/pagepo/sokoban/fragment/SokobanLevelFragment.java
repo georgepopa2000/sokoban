@@ -11,7 +11,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,47 +65,6 @@ public class SokobanLevelFragment extends Fragment {
 				float origx,origy;
 				float dif = Math.max(50,sbv.getBrickSize());
 				
-				/*
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					if (event.getAction()==MotionEvent.ACTION_DOWN){
-						origx = event.getAxisValue(MotionEvent.AXIS_X);
-						origy = event.getAxisValue(MotionEvent.AXIS_Y);
-						return true;
-					} else 
-						if (event.getAction() == MotionEvent.ACTION_UP){
-						} else 
-							if (event.getAction() == MotionEvent.ACTION_MOVE){	
-								int action = 0;
-								float offsetx = origx-event.getAxisValue(MotionEvent.AXIS_X);
-								if (Math.abs(offsetx) > dif){
-									if (offsetx > 0) action = BoardState.MOVE_LEFT;
-										else action = BoardState.MOVE_RIGHT;
-									origx = event.getAxisValue(MotionEvent.AXIS_X);
-								}
-								float offsety = origy-event.getAxisValue(MotionEvent.AXIS_Y);
-								if (Math.abs(offsety) > dif){
-									if (offsety > 0) action = BoardState.MOVE_TOP;
-										else action = BoardState.MOVE_BOTTOM;
-									origy = event.getAxisValue(MotionEvent.AXIS_Y);
-								}							
-								if (action != 0 ){
-									if (gl.isLevelFinished()) return true;
-									if (gl.canMove(action))  
-									{
-									gl.move(action);
-									sbv.invalidate();									
-									if (gl.isLevelFinished()){
-										showFinishedDialog();
-									}
-									getActivity().invalidateOptionsMenu();
-									}
-								}
-								//return true;
-							}
-					return false;
-				}
-				//*/
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction()==MotionEvent.ACTION_DOWN){
@@ -212,6 +170,7 @@ public class SokobanLevelFragment extends Fragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setMessage("Victory! You solved it! Oauu! I can't believe it!")
 		.setTitle("Level Solved")
+		.setCancelable(false)
 		.setPositiveButton("Go to menu", new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -222,13 +181,13 @@ public class SokobanLevelFragment extends Fragment {
 		});
 		final Level nextLevel = LevelsManager.getInstance().getNextLevel(lvl);		
 		if (nextLevel != null){
-		builder.setNeutralButton("Next level", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				SokobanLevelFragment.this.startNewLevel(nextLevel);				
-			}
-		});
+			builder.setNeutralButton("Next level", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					SokobanLevelFragment.this.startNewLevel(nextLevel);				
+				}
+			});
 		}
 		
 	
@@ -245,6 +204,14 @@ public class SokobanLevelFragment extends Fragment {
 		//sbv.invalidate();		
 		this.lvl = level;
 		getActivity().invalidateOptionsMenu();
+	}
+	
+	public void onBackPressed(){
+		if (gl.getStateManager().canUndo()){
+			gl.getStateManager().undo();
+			sbv.invalidate();
+			getActivity().invalidateOptionsMenu();
+		}		
 	}
 	
 }

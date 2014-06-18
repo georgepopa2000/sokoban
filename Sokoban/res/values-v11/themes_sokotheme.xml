@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="sokotheme" parent="@style/_sokotheme"/>
+
+  <style name="_sokotheme" parent="android:Theme.Holo.Light.DarkActionBar">
+
+    <item name="android:editTextBackground">@drawable/sokotheme_edit_text_holo_light</item>
+
+    <item name="android:textColorHighlight">#9933b5e5</item>
+    <item name="android:textSelectHandleLeft">@drawable/sokotheme_text_select_handle_left</item>
+    <item name="android:textSelectHandleRight">@drawable/sokotheme_text_select_handle_right</item>
+    <item name="android:textSelectHandle">@drawable/sokotheme_text_select_handle_middle</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewsokotheme</item>
+
+    <item name="android:listChoiceIndicatorMultiple">@drawable/sokotheme_btn_check_holo_light</item>
+
+    <item name="android:listChoiceIndicatorSingle">@drawable/sokotheme_btn_radio_holo_light</item>
+
+    <item name="android:buttonStyle">@style/Buttonsokotheme</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonsokotheme</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/Spinnersokotheme</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarsokotheme</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarsokotheme</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarsokotheme</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigsokotheme</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallsokotheme</item>
+
+    <item name="android:buttonStyleToggle">@style/Togglesokotheme</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/sokotheme_list_selector_holo_light</item>
+
+    <item name="android:activatedBackgroundIndicator">@drawable/sokotheme_activated_background_holo_light</item>
+
+    <item name="android:fastScrollThumbDrawable">@drawable/sokotheme_fastscroll_thumb_holo</item>
+
+  </style>
+
+</resources>

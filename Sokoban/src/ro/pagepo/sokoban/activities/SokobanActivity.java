@@ -16,6 +16,8 @@ public class SokobanActivity extends Activity {
 	
 	public static final String PUT_LEVEL = "put_level";
 	public static final String PUT_LEVELPACK_NAME = "put_level_pack_name";
+	
+	public static final String TAG_FRAGMENT_SOKO = "fragmentsokoban";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class SokobanActivity extends Activity {
 			Fragment f = SokobanLevelFragment.newInstance(lvl,packName);
 			f.setHasOptionsMenu(true);
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, f).commit();
+					.add(R.id.container, f, TAG_FRAGMENT_SOKO).commit();
 		}
 		
 		ActionBar actionBar = getActionBar();
@@ -60,6 +62,13 @@ public class SokobanActivity extends Activity {
 	        return true;
 	    }		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		SokobanLevelFragment slf = (SokobanLevelFragment) getFragmentManager().findFragmentByTag(TAG_FRAGMENT_SOKO);
+		slf.onBackPressed();
+		//super.onBackPressed();
 	}
 
 

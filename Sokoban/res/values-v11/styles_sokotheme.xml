@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="AutoCompleteTextViewsokotheme" parent="android:Widget.Holo.Light.AutoCompleteTextView">
+      <item name="android:dropDownSelector">@drawable/sokotheme_list_selector_holo_light</item>
+	    <item name="android:background">@drawable/sokotheme_edit_text_holo_light</item>
+  </style>
+
+  <style name="Buttonsokotheme" parent="android:Widget.Holo.Light.Button">
+	  <item name="android:background">@drawable/sokotheme_btn_default_holo_light</item>
+  </style>
+
+  <style name="ImageButtonsokotheme" parent="android:Widget.Holo.Light.ImageButton">
+	  <item name="android:background">@drawable/sokotheme_btn_default_holo_light</item>
+  </style>
+
+  <style name="Spinnersokotheme" parent="android:Widget.Holo.Light.Spinner">
+      <item name="android:background">@drawable/sokotheme_spinner_background_holo_light</item>
+      <item name="android:dropDownSelector">@drawable/sokotheme_list_selector_holo_light</item>
+  </style>
+
+  <style name="ProgressBarsokotheme" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
+      <item name="android:progressDrawable">@drawable/sokotheme_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/sokotheme_progress_indeterminate_horizontal_holo_light</item>
+  </style>
+
+  <style name="SeekBarsokotheme" parent="android:Widget.Holo.Light.SeekBar">
+      <item name="android:progressDrawable">@drawable/sokotheme_scrubber_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/sokotheme_scrubber_progress_horizontal_holo_light</item>
+      <item name="android:thumb">@drawable/sokotheme_scrubber_control_selector_holo_light</item>
+  </style>
+
+  <style name="RatingBarsokotheme" parent="android:Widget.Holo.Light.RatingBar">
+      <item name="android:progressDrawable">@drawable/sokotheme_ratingbar_full_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/sokotheme_ratingbar_full_holo_light</item>
+  </style>
+
+  <style name="RatingBarBigsokotheme" parent="android:Widget.Holo.Light.RatingBar.Indicator">
+      <item name="android:progressDrawable">@drawable/sokotheme_ratingbar_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/sokotheme_ratingbar_holo_light</item>
+  </style>
+
+  <style name="RatingBarSmallsokotheme" parent="android:Widget.Holo.Light.RatingBar.Small">
+      <item name="android:progressDrawable">@drawable/sokotheme_ratingbar_small_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/sokotheme_ratingbar_small_holo_light</item>
+  </style>
+
+  <style name="Togglesokotheme" parent="android:Widget.Holo.Light.Button.Toggle">
+      <item name="android:background">@drawable/sokotheme_btn_toggle_holo_light</item>
+  </style>
+
+</resources>
