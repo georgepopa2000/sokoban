@@ -141,12 +141,14 @@ public class LevelsDataSource {
 		Cursor cursor = database.query(SQLDatabaseHelper.TABLE_LEVEL, null, SQLDatabaseHelper.KEY_ID + " = " + id, null, null, null, null);
 		cursor.moveToFirst();
 		if (cursor.isAfterLast()) return null;
-		Level lvl = new Level(cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_PACK)), 
+		Level lvl = new Level(
+				cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_ID)),
+				cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_PACK)), 
 				cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_NAME)), 
 				cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_SOLVED)), 
 				cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_WIDTH)), 
 				cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_HEIGHT)), 
-				cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_CONTENT)));
+				cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_CONTENT)));	
 		cursor.close();
 		return lvl;
 	}
@@ -161,17 +163,25 @@ public class LevelsDataSource {
 		List<Level> llvl = new ArrayList<Level>();
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()){
-			Level lvl = new Level(cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_PACK)), 
+			Level lvl = new Level(
+					cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_ID)),
+					cursor.getLong(cursor.getColumnIndex(SQLDatabaseHelper.KEY_PACK)), 
 					cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_NAME)), 
 					cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_SOLVED)), 
 					cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_WIDTH)), 
 					cursor.getInt(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_HEIGHT)), 
-					cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_CONTENT)));			
+					cursor.getString(cursor.getColumnIndex(SQLDatabaseHelper.KEY_LVL_CONTENT)));	
 			llvl.add(lvl);
 			cursor.moveToNext();
 		}
 		cursor.close();
 		return llvl;
+	}
+	
+	public int updateLevel(Level lvl){
+		ContentValues cv = new ContentValues();
+		cv.put(SQLDatabaseHelper.KEY_LVL_SOLVED, lvl.getSolved());
+		return database.update(SQLDatabaseHelper.TABLE_LEVEL, cv, SQLDatabaseHelper.KEY_ID + " = " + lvl.getId(), null);
 	}
 	
 }

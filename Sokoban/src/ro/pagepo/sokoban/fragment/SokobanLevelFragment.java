@@ -5,11 +5,14 @@ import ro.pagepo.sokoban.activities.SokobanActivity;
 import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.fragment.view.SokoBoardView;
 import ro.pagepo.sokoban.levels.GameLevel;
+import ro.pagepo.sokoban.levels.LevelsManager;
 import ro.pagepo.sokoban.map.state.BoardState;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -134,7 +137,7 @@ public class SokobanLevelFragment extends Fragment {
 									gl.move(action);
 									sbv.invalidate();									
 									if (gl.isLevelFinished()){
-										showFinishedDialog();
+										levelFinished();
 									}
 									getActivity().invalidateOptionsMenu();
 									}
@@ -203,30 +206,45 @@ public class SokobanLevelFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void showFinishedDialog(){		
+	public void levelFinished(){	
+		Log.d("currentlvl",lvl.getName() + " "+lvl.getId());
+		LevelsManager.getInstance().levelFinished(lvl);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setMessage("Victory! You solved it! Oauu! I can't believe it!")
 		.setTitle("Level Solved")
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		.setPositiveButton("Go to menu", new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-				
-			}
-		})
-		.setNeutralButton("Next level", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
+				SokobanLevelFragment.this.getActivity().finish();
 				
 			}
 		});
+		final Level nextLevel = LevelsManager.getInstance().getNextLevel(lvl);		
+		if (nextLevel != null){
+		builder.setNeutralButton("Next level", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				SokobanLevelFragment.this.startNewLevel(nextLevel);				
+			}
+		});
+		}
+		
 	
 		AlertDialog ad = builder.create();
 		ad.show();
 		//builder.create().show();
+	}
+	
+	public void startNewLevel(Level level){
+		Log.d("lfinished",level.getName() + "level finished "+level.getId());
+		gl = new GameLevel(level);
+		SokoBoardView sbv = (SokoBoardView) getView().findViewById(R.id.sokoBoardView1);
+		sbv.setGameLevel(gl);
+		//sbv.invalidate();		
+		this.lvl = level;
+		getActivity().invalidateOptionsMenu();
 	}
 	
 }

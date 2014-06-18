@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SokobanLevels xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SokobanLev.xsd">
+  <Title>Test levels</Title>
+  <Description>
+Gigi kent
+  </Description>
+  <Email>gigi2000@ymail.com</Email>
+  <LevelCollection Copyright="gigi" MaxWidth="10" MaxHeight="10">
+    <Level Id="1" Width="5" Height="5">
+      <L>#####</L>
+      <L># . #</L>
+      <L># $ #</L>
+      <L># @ #</L>
+      <L>#####</L>
+    </Level>
+        <Level Id="2" Width="5" Height="5">
+      <L>#####</L>
+      <L># . #</L>
+      <L># $ #</L>
+      <L># @ #</L>
+      <L>#####</L>
+    </Level>
+        <Level Id="3" Width="5" Height="5">
+      <L>#####</L>
+      <L># . #</L>
+      <L># $ #</L>
+      <L># @ #</L>
+      <L>#####</L>
+    </Level>
+        <Level Id="4" Width="5" Height="5">
+      <L>#####</L>
+      <L># . #</L>
+      <L># $ #</L>
+      <L># @ #</L>
+      <L>#####</L>
+    </Level>
+        <Level Id="5" Width="5" Height="5">
+      <L>#####</L>
+      <L># . #</L>
+      <L># $ #</L>
+      <L># @ #</L>
+      <L>#####</L>
+    </Level>
+  </LevelCollection>
+</SokobanLevels>
