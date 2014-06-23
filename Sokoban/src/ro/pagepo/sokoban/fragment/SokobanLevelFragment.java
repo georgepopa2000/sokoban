@@ -1,6 +1,7 @@
 package ro.pagepo.sokoban.fragment;
 
 import ro.pagepo.sokoban.R;
+import ro.pagepo.sokoban.activities.SettingsActivity;
 import ro.pagepo.sokoban.activities.SokobanActivity;
 import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.fragment.view.SokoBoardView;
@@ -12,6 +13,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -187,6 +189,10 @@ public class SokobanLevelFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_settings:
+			Intent intent = new Intent(this.getActivity(), SettingsActivity.class);
+			startActivity(intent);			
+			return true;	
 		case R.id.action_exit: // action exit level to menu
 			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 				@Override

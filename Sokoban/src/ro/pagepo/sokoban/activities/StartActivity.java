@@ -7,10 +7,8 @@ import ro.pagepo.sokoban.activities.views.LevelsChooserListAdapter;
 import ro.pagepo.sokoban.database.LevelsDataSource;
 import ro.pagepo.sokoban.database.model.LevelsPack;
 import ro.pagepo.sokoban.fragment.AboutDialogFragment;
-import ro.pagepo.sokoban.fragment.SokobanLevelFragment;
 import ro.pagepo.sokoban.levels.ImportLevelsPack;
 import ro.pagepo.sokoban.levels.LevelsManager;
-import ro.pagepo.sokoban.levels.exception.InvalidXMLLevelPackException;
 import ro.pagepo.sokoban.utils.FileDialog;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,7 +21,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract.DeletedContacts;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,11 +75,18 @@ public class StartActivity extends Activity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);			
-			return true;
+			return true;			
+		case R.id.action_about:
+			showAbout();
+			return true;			
+		case R.id.action_help:
+			showHelp();
+			return true;			
+
 		}
 		return super.onOptionsItemSelected(item);
 	} 
@@ -161,8 +165,7 @@ public class StartActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					DialogFragment d = AboutDialogFragment.newInstance("Help","help.html");					
-					d.show(getFragmentManager(), "dialog about");
+					((StartActivity)(PlaceholderFragment.this.getActivity())).showHelp();
 				}
 			});		
 			
@@ -171,8 +174,7 @@ public class StartActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					DialogFragment d = AboutDialogFragment.newInstance("About","index.html");					
-					d.show(getFragmentManager(), "dialog about");
+					((StartActivity)(PlaceholderFragment.this.getActivity())).showAbout();
 				}
 			});				
 			
@@ -182,6 +184,17 @@ public class StartActivity extends Activity {
 			
 			return rootView;
 		}
+	}
+	
+	
+	protected void showAbout(){
+		DialogFragment d = AboutDialogFragment.newInstance("About","index.html");					
+		d.show(getFragmentManager(), "dialog about");		
+	}
+	
+	protected void showHelp(){
+		DialogFragment d = AboutDialogFragment.newInstance("Help","help.html");					
+		d.show(getFragmentManager(), "dialog about");		
 	}
 	
 	protected void showDialogDeletePack(){
