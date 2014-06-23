@@ -1,15 +1,12 @@
 package ro.pagepo.sokoban.levels;
 
-import java.util.ArrayList;
-
-import android.util.Log;
-
 import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.map.BoardMap;
 import ro.pagepo.sokoban.map.PositionCoordinates;
 import ro.pagepo.sokoban.map.state.BoardState;
 import ro.pagepo.sokoban.map.state.StateElement;
 import ro.pagepo.sokoban.map.state.StateManager;
+import android.util.Log;
 
 //should contain map, state, state manager
 public class GameLevel {
@@ -123,5 +120,44 @@ public class GameLevel {
 			}
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * moves on this level not counting undo and redo moves
+	 * @return total number of moves in this level
+	 */
+	public int getMovesNumber(){
+		return stateManager.getNumberOfStates();
+	}
+	
+	
+	/**
+	 * check if the move specified by mode will be a brick push
+	 * @param mode mode where should the pak move relative to the current position left,right,up,down BoardState.MOVE_LEFT,BoardState.MOVE_RIGHT ....
+	 * @return true if the next move is a push, false otherwise
+	 */
+	public boolean isNextMovePush(int mode){
+		int offsetx = 0;
+		int offsety = 0;
+		switch (mode){
+		case BoardState.MOVE_LEFT:
+			offsetx = -1;
+			break;
+		case BoardState.MOVE_RIGHT:
+			offsetx = 1;
+			break;
+		case BoardState.MOVE_TOP:
+			offsety = -1;
+			break;
+		case BoardState.MOVE_BOTTOM:
+			offsety = 1;
+			break;
+		}		
+		BoardState bs = stateManager.getCurrentState();
+		if (bs.isBrickAt(new PositionCoordinates(bs.getPakPositionX()+offsetx, bs.getPakPositionY()+offsety))){
+			return true;
+		}
+		return false;
 	}
 }

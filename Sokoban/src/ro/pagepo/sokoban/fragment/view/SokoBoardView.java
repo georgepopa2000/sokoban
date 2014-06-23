@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 
@@ -51,31 +52,54 @@ public class SokoBoardView extends View{
 		doorBrickBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_draw_door_brick);
 		
 		r = new Rect(0,0,0,0);
-
+		
 	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		
-		int d=Math.min(measure(widthMeasureSpec), measure(heightMeasureSpec));
 		
-		setMeasuredDimension(d,d);
+		
+		int width = measure(widthMeasureSpec);
+		int height = measure(heightMeasureSpec);
+		int d=Math.min(width,height);
+		int newWidth = d;
+		int newHeight = d;
+		
+		if (gameLevel != null) {
+			int wtile = width/gameLevel.getBoardMap().getSizeY();
+			int htile = height/gameLevel.getBoardMap().getSizeX();
+			int tile = Math.min(wtile, htile);
+			newWidth = tile*gameLevel.getBoardMap().getSizeY();
+			newHeight = tile*gameLevel.getBoardMap().getSizeX();
+		}
+			
+		
+		//Log.d("onmeasure sokoview",newWidth+" "+ newHeight);
+		
+		
+		setMeasuredDimension(width,newHeight);
 	}
-
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		if (gameLevel == null) return;
+		if (canvas == null) return;
+		//Log.d("ondraw sokoview",getWidth()+" "+getHeight());
 		super.onDraw(canvas);
 		int size = getBrickSize();	
 		//Log.d("xxx",getWidth()+"");
 		//Log.d("xxx", size+"");
-		canvas.drawColor(p.getColor());
+		//canvas.drawColor(p.getColor());
+		//Log.d("xxx","margins left " +getLeftMargins());
+		int leftMargins = 0;//getLeftMargins();
 		if (gameLevel!=null){
 			BoardState boardState = gameLevel.getCurrentBoardState();
 			BoardMap boardMap = gameLevel.getBoardMap();
 			for (int i=0;i<boardMap.getSizeX();i++){
 				for (int j=0;j<boardMap.getSizeY();j++){
-					r.set(size*j, size*i, size*j + size, size*i + size);
+					r.set(leftMargins+size*j, size*i, leftMargins +size*j + size, size*i + size);
 					
 					int state =boardMap.getStateElement(i, j);
 					Bitmap b =null;
@@ -96,13 +120,13 @@ public class SokoBoardView extends View{
 				int x = boardState.getBrickPositionXAt(i);
 				int y = boardState.getBrickPositionYAt(i);
 				int state =boardMap.getStateElement(x, y);
-				r.set(size*y, size*x, size*y + size, size*x + size);
+				r.set(leftMargins +size*y, size*x, leftMargins + size*y + size, size*x + size);
 				if (state == StateElement.STATE_DOOR)	 canvas.drawBitmap(doorBrickBitmap, null, r, null); 
 					else canvas.drawBitmap(brickBitmap, null, r, null);
 			}
 			int x = boardState.getPakPositionX();
 			int y = boardState.getPakPositionY();
-			r.set(size*y, size*x, size*y + size, size*x + size);
+			r.set(leftMargins + size*y, size*x, leftMargins + size*y + size, size*x + size);
 			canvas.drawBitmap(pakBitmap, null, r, null);			
 		}
 		
@@ -117,7 +141,7 @@ public class SokoBoardView extends View{
 		
 		int result = 0;
 		if (mode == MeasureSpec.UNSPECIFIED){
-			result = 300;
+			result = 100;
 		} else result = size;
 		
 		return result;
@@ -133,8 +157,11 @@ public class SokoBoardView extends View{
 	 * @return size in pixels
 	 */
 	public int getBrickSize(){		
-		int maxTiles = Math.max(gameLevel.getBoardMap().getSizeX(),gameLevel.getBoardMap().getSizeY());
-		return (int) Math.round(((double)getWidth())/maxTiles);
+		return Math.min((int) Math.round(((double)getWidth())/gameLevel.getBoardMap().getSizeY()),(int) Math.round(((double)getHeight())/gameLevel.getBoardMap().getSizeX()));
+	}
+	
+	private int getLeftMargins(){
+		return Math.round((getWidth()-getBrickSize()*gameLevel.getBoardMap().getSizeY())/2);
 	}
 	
 }

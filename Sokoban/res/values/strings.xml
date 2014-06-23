@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_exit">Exit</string>
+    <string name="action_restart">Restart</string>
     <string name="action_back">Undo</string>
     <string name="action_redo">Redo</string>
     <string name="title_activity_start">StartActivity</string>
@@ -20,5 +21,9 @@
     <string name="action_example">Example action</string>
     <string name="icon_checked">Solved</string>
     <string name="icon_unsolved">Not solved/tried</string>
+    <string name="str_moves">Moves:</string>
+    <string name="str_pack">Levels pack:</string>
+    <string name="str_level">Level:</string>
+    <string name="str_time">Time elapsed:</string>
 
 </resources>

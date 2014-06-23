@@ -100,14 +100,6 @@ public class StartActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_start,
 					container, false);	
-			Button butStartApp = (Button) rootView.findViewById(R.id.butStartApp);
-			butStartApp.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					PlaceholderFragment.this.startActivity(new Intent(PlaceholderFragment.this.getActivity(), SokobanActivity.class));
-				}
-			});
 			
 			Button butNewHame = (Button) rootView.findViewById(R.id.butNewGame);
 			butNewHame.setOnClickListener(new View.OnClickListener() {

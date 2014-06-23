@@ -47,4 +47,13 @@ public class StateManager {
 	public boolean canUndo(){
 		return !undoStack.isEmpty();
 	}
+	
+	
+	/**
+	 * number of states in undo stack
+	 * @return the number of states
+	 */
+	public int getNumberOfStates(){
+		return undoStack.size();
+	}
 }
