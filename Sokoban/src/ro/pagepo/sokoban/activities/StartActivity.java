@@ -11,7 +11,10 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,31 +43,17 @@ public class StartActivity extends Activity {
 		ImportLevelsPack il = new ImportLevelsPack(this);
 		il.importLevelsFromAssets();
 		
-		/*
-		long idlp = datasource.insertLevelPack(new LevelsPack("original"));
-		Object o = datasource.getLevelPackById(idlp);
-		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");
-		o = datasource.getLevelPackById(idlp+1);
-		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");
-		o = datasource.getLevelPackByName("original");
-		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");
-		o = datasource.getLevelPackByName("original1");
-		if (o != null ) Log.d("xxx","not null"); else Log.d("xxx","null");		
 		
-		
-		datasource.insertLevel(new Level(idlp, "aaaa", 0, 10, 10, "aaaaa"));
-		datasource.insertLevel(new Level(idlp, "aaaa1", 0, 10, 10, "aaaaa1"));
-		datasource.insertLevelPack(new LevelsPack("original + extra"));
-		
-		List<LevelsPack> llp = datasource.getAllLevelsPack();
-		String tot = new String();
-		for (Iterator<LevelsPack> iterator = llp.iterator(); iterator.hasNext();) {
-			LevelsPack levelsPack = iterator.next();
-			tot+=levelsPack.getName()+" ";
-			datasource.deleteLevelPack(levelsPack.getId());
+		//on first run sound and vibrate set to on for settings
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean isFirstRun = sp.getBoolean("firstrun", true);
+		if (isFirstRun){
+			Editor editor = sp.edit();
+			editor.putBoolean("soundsenabled", true);
+			editor.putBoolean("vibrations", true);
+			editor.apply();
 		}
-		Log.d("xxxxxx",tot+"");
-		//*/
+
 	}
 
 	@Override
@@ -82,6 +71,8 @@ public class StartActivity extends Activity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivity(intent);			
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -109,6 +100,17 @@ public class StartActivity extends Activity {
 					((StartActivity)(PlaceholderFragment.this.getActivity())).showDialogLevelsPack();
 				}
 			});
+			
+			Button butSettings = (Button) rootView.findViewById(R.id.butSettings);
+			butSettings.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity(), SettingsActivity.class);
+					startActivity(intent);
+				}
+			});
+			
 			return rootView;
 		}
 	}

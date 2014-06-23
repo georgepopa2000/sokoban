@@ -10,9 +10,13 @@ import ro.pagepo.sokoban.map.state.BoardState;
 import ro.pagepo.sokoban.sound.SoundsManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -104,23 +108,7 @@ public class SokobanLevelFragment extends Fragment {
 							action = BoardState.MOVE_RIGHT;
 						origy = event.getAxisValue(MotionEvent.AXIS_Y);
 					}
-					if (action != 0) {
-						if (gl.isLevelFinished())
-							return true;
-						if (gl.canMove(action)) {
-							
-							if (gl.isNextMovePush(action)){
-								SoundsManager.getInstance().playSound(SoundsManager.ACTION_PUSH);
-							} else SoundsManager.getInstance().playSound(SoundsManager.ACTION_WALK);
-							gl.move(action);
-							sbv.invalidate();
-							if (gl.isLevelFinished()) {
-								levelFinished();
-							}
-							getActivity().invalidateOptionsMenu();
-							updateInfo();
-						}
-					}
+					onMove(action);
 					// return true;
 				}
 				return false;
@@ -130,6 +118,38 @@ public class SokobanLevelFragment extends Fragment {
 		return rootView;
 	}
 
+	
+	public boolean onMove(int action){
+		if (action != 0) {
+			if (gl.isLevelFinished())
+				return true;
+			if (gl.canMove(action)) {				
+				if (gl.isNextMovePush(action)){
+					SoundsManager.getInstance().playSound(SoundsManager.ACTION_PUSH);
+					//on push vibrate
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+					if (prefs.getBoolean("vibrations", true)){//check if vibrate is enabled in settings
+						Vibrator v = (Vibrator) this.getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+						v.vibrate(200);
+					}
+										
+				} else SoundsManager.getInstance().playSound(SoundsManager.ACTION_WALK);
+				
+
+				gl.move(action);
+				sbv.invalidate();
+				if (gl.isLevelFinished()) {
+					levelFinished();
+				}
+				getActivity().invalidateOptionsMenu();
+				updateInfo();
+			} else {
+				SoundsManager.getInstance().playSound(SoundsManager.ACTION_BLOCK);
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -177,20 +197,10 @@ public class SokobanLevelFragment extends Fragment {
 					.setNegativeButton("No", dialogClickListener).show();
 			return true;
 		case R.id.action_back: // action undo
-			if (gl.getStateManager().canUndo()) {
-				gl.getStateManager().undo();
-				sbv.invalidate();
-				getActivity().invalidateOptionsMenu();
-				updateInfo();
-			}
+			doUndo();
 			return true;
 		case R.id.action_redo:// action redo
-			if (gl.getStateManager().canRedo()) {
-				gl.getStateManager().redo();
-				sbv.invalidate();
-				getActivity().invalidateOptionsMenu();
-				updateInfo();
-			}
+			doRedo();
 			return true;
 		case R.id.action_restart:// action restart level
 			dialogClickListener = new DialogInterface.OnClickListener() {
@@ -220,10 +230,32 @@ public class SokobanLevelFragment extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private void doRedo(){
+		if (gl.getStateManager().canRedo()) {
+			gl.getStateManager().redo();
+			sbv.invalidate();
+			getActivity().invalidateOptionsMenu();
+			updateInfo();
+			SoundsManager.getInstance().playSound(SoundsManager.ACTION_UNDO);
+		}		
+	}
+	
+	private void doUndo(){
+		if (gl.getStateManager().canUndo()) {
+			gl.getStateManager().undo();
+			sbv.invalidate();
+			getActivity().invalidateOptionsMenu();
+			updateInfo();
+			SoundsManager.getInstance().playSound(SoundsManager.ACTION_UNDO);
+		}
+	}
+	
 
 	public void levelFinished() {
-		Log.d("currentlvl", lvl.getName() + " " + lvl.getId());
+		//Log.d("currentlvl", lvl.getName() + " " + lvl.getId());
 		LevelsManager.getInstance().levelFinished(lvl);
+		SoundsManager.getInstance().playSound(SoundsManager.ACTION_VICTORY);
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				this.getActivity());
 		Chronometer chr = (Chronometer) getView().findViewById(R.id.chrTimer);
@@ -243,7 +275,7 @@ public class SokobanLevelFragment extends Fragment {
 							}
 						});
 		final Level nextLevel = LevelsManager.getInstance().getNextLevel(lvl);
-		if (nextLevel != null) {
+		if (nextLevel != null) {//only add next level button if there is a next level in the pack
 			builder.setNeutralButton("Next level",
 					new DialogInterface.OnClickListener() {
 
@@ -259,6 +291,10 @@ public class SokobanLevelFragment extends Fragment {
 		// builder.create().show();
 	}
 
+	/**
+	 * starts a new level
+	 * @param level - the new level to be started
+	 */
 	public void startNewLevel(Level level) {
 		//Log.d("lfinished", level.getName() + "level finished " + level.getId());
 		gl = new GameLevel(level);
@@ -272,14 +308,12 @@ public class SokobanLevelFragment extends Fragment {
 	}
 
 	public void onBackPressed() {
-		if (gl.getStateManager().canUndo()) {
-			gl.getStateManager().undo();
-			sbv.invalidate();
-			getActivity().invalidateOptionsMenu();
-			updateInfo();
-		}
+		doUndo();
 	}
 
+	/**
+	 * update the info table with number of moves, current level, current levels pack
+	 */
 	public void updateInfo() {
 		View view = getView();
 		TextView txtMoves = (TextView) view.findViewById(R.id.txtMoves);

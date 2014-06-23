@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference android:key="soundsenabled" android:summaryOn="Sounds are enabled" android:summaryOff="Sounds are disabled" android:title="Enable sounds" ></CheckBoxPreference>
+	<CheckBoxPreference android:key="vibrations" android:summaryOn="Phone vibrate on move enabled" android:summaryOff="Phone vibrate on move disabled" android:title="Enable vibrate"/>
+</PreferenceScreen>
