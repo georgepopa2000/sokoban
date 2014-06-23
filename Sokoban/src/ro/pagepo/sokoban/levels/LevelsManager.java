@@ -93,4 +93,8 @@ public class LevelsManager {
 		lvl.setSolved(1);
 		datasource.updateLevel(lvl);
 	}
+	
+	public int deleteLevelPack(LevelsPack lp){
+		return datasource.deleteLevelPack(lp.getId());
+	}
 }

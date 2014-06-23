@@ -12,7 +12,10 @@
     <string name="title_activity_start">StartActivity</string>
     <string name="but_new_game">Start new game</string>
     <string name="but_help">Help</string>
+    <string name="but_about">About</string>
     <string name="but_import">Import levels pack</string>
+    <string name="but_close_dialog">Close</string>
+    <string name="but_delete_pack">Delete levels pack</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

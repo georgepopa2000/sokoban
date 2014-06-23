@@ -28,11 +28,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/but_import" />    
+        
+    <Button
+        android:id="@+id/butDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_delete_pack" />     
 
     <Button
         android:id="@+id/butHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/but_help" />
+    
+    <Button
+        android:id="@+id/butAbout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_about" />    
 
 </LinearLayout>
