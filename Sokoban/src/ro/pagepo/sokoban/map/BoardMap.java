@@ -2,8 +2,6 @@ package ro.pagepo.sokoban.map;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.map.state.StateElement;
 

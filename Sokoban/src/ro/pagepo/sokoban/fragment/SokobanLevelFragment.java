@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class SokobanLevelFragment extends Fragment {
@@ -194,26 +192,7 @@ public class SokobanLevelFragment extends Fragment {
 			startActivity(intent);			
 			return true;	
 		case R.id.action_exit: // action exit level to menu
-			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						SokobanLevelFragment.this.getActivity().finish();
-						break;
-
-					case DialogInterface.BUTTON_NEGATIVE:
-						dialog.dismiss();
-						break;
-					}
-				}
-			};
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					this.getActivity());
-			builder.setMessage(
-					"Are you sure you want to exit level? Your progress will be lost.")
-					.setPositiveButton("Yes", dialogClickListener)
-					.setNegativeButton("No", dialogClickListener).show();
+			doExit();
 			return true;
 		case R.id.action_back: // action undo
 			doUndo();
@@ -222,32 +201,60 @@ public class SokobanLevelFragment extends Fragment {
 			doRedo();
 			return true;
 		case R.id.action_restart:// action restart level
-			dialogClickListener = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						gl = new GameLevel(lvl);
-						SokoBoardView sbv = (SokoBoardView) SokobanLevelFragment.this
-								.getView().findViewById(R.id.sokoBoardView1);
-						sbv.setGameLevel(gl);
-						getActivity().invalidateOptionsMenu();
-						updateInfo();
-						break;
-
-					case DialogInterface.BUTTON_NEGATIVE:
-						dialog.dismiss();
-						break;
-					}
-				}
-			};
-			builder = new AlertDialog.Builder(this.getActivity());
-			builder.setMessage(
-					"Are you sure you want to restart level? Your progress will be lost.")
-					.setPositiveButton("Yes", dialogClickListener)
-					.setNegativeButton("No", dialogClickListener).show();
+			doRestart();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void doExit(){
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					SokobanLevelFragment.this.getActivity().finish();
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.dismiss();
+					break;
+				}
+			}
+		};
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				this.getActivity());
+		builder.setMessage(
+				"Are you sure you want to exit level? Your progress will be lost.")
+				.setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener).show();		
+	}
+	
+	private void doRestart(){
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					gl = new GameLevel(lvl);
+					SokoBoardView sbv = (SokoBoardView) SokobanLevelFragment.this
+							.getView().findViewById(R.id.sokoBoardView1);
+					sbv.setGameLevel(gl);
+					getActivity().invalidateOptionsMenu();
+					updateInfo();
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.dismiss();
+					break;
+				}
+			}
+		};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		builder.setMessage(
+				"Are you sure you want to restart level? Your progress will be lost.")
+				.setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener).show();		
 	}
 	
 	/**
@@ -266,14 +273,16 @@ public class SokobanLevelFragment extends Fragment {
 	/**
 	 * undo the state of the board if it's possible and update the results
 	 */
-	private void doUndo(){
+	private boolean doUndo(){
 		if (gl.getStateManager().canUndo()) {
 			gl.getStateManager().undo();
 			sbv.invalidate();
 			getActivity().invalidateOptionsMenu();
 			updateInfo();
 			SoundsManager.getInstance().playSound(SoundsManager.ACTION_UNDO);
+			return true;
 		}
+		return false;
 	}
 	
 
@@ -340,7 +349,8 @@ public class SokobanLevelFragment extends Fragment {
 	 * on back button undo. this is called from the parrent activity
 	 */
 	public void onBackPressed() {
-		doUndo();
+		if (!doUndo()) doExit();
+		
 	}
 
 	/**
