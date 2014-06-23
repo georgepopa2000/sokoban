@@ -1,5 +1,10 @@
 package ro.pagepo.sokoban.map.state;
 
+/**
+ * An element on the board
+ * Can be a wall, empty space, floor, door (target)
+ * It just handles boardmap elements.
+ */
 public class StateElement {
 	public static final int STATE_WALL = 1;
 	public static final int STATE_EMPTY = 0;
@@ -9,7 +14,7 @@ public class StateElement {
 	int boardElementState = -1;
 
 	public StateElement( ) {
-		boardElementState = STATE_WALL;
+		boardElementState = STATE_EMPTY;
 	}
 
 	public StateElement(int boardElementState) {

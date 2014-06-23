@@ -78,12 +78,21 @@ public class SokobanLevelFragment extends Fragment {
 		sbv.setGameLevel(gl);
 
 		sbv.setOnTouchListener(new View.OnTouchListener() {
+			//handle the moves on the sokoview based on the touches
+			/**
+			 * the last touched pos from where we shpould compute if there's move or not 
+			 */
 			float origx, origy;
+			/**
+			 * the distance "swiped" when should move
+			 * is the size of a brick but no less than 50
+			 */
 			float dif = Math.max(50, sbv.getBrickSize());
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					//on action down save
 					origx = event.getAxisValue(MotionEvent.AXIS_X);
 					origy = event.getAxisValue(MotionEvent.AXIS_Y);
 					return true;
@@ -118,13 +127,18 @@ public class SokobanLevelFragment extends Fragment {
 		return rootView;
 	}
 
-	
+	/**
+	 * move the sokoban on the current board and based on the action and update the result on the board view
+	 * @param action the action to be taken,can be BoardState.MOVE_RIGHT,BoardState.MOVE_LEFT etc.
+	 * @return true if the move was made
+	 */
 	public boolean onMove(int action){
 		if (action != 0) {
 			if (gl.isLevelFinished())
 				return true;
-			if (gl.canMove(action)) {				
-				if (gl.isNextMovePush(action)){
+			if (gl.canMove(action)) {		
+				//play a sound on move
+				if (gl.isNextMovePush(action)){//if is push
 					SoundsManager.getInstance().playSound(SoundsManager.ACTION_PUSH);
 					//on push vibrate
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -137,7 +151,7 @@ public class SokobanLevelFragment extends Fragment {
 				
 
 				gl.move(action);
-				sbv.invalidate();
+				sbv.invalidate();//update the sokoview
 				if (gl.isLevelFinished()) {
 					levelFinished();
 				}
@@ -156,8 +170,7 @@ public class SokobanLevelFragment extends Fragment {
 		updateInfo();		
 	}
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {		
 		inflater.inflate(R.menu.level_sokoban, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -231,6 +244,9 @@ public class SokobanLevelFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/**
+	 * redo the state of the board if it's possible and update the results
+	 */
 	private void doRedo(){
 		if (gl.getStateManager().canRedo()) {
 			gl.getStateManager().redo();
@@ -241,6 +257,9 @@ public class SokobanLevelFragment extends Fragment {
 		}		
 	}
 	
+	/**
+	 * undo the state of the board if it's possible and update the results
+	 */
 	private void doUndo(){
 		if (gl.getStateManager().canUndo()) {
 			gl.getStateManager().undo();
@@ -252,10 +271,16 @@ public class SokobanLevelFragment extends Fragment {
 	}
 	
 
+	/**
+	 * on level finished disoplay dialog for the next level + info about the current finished level
+	 * set the level as solved in the LevelsManager
+	 */
 	public void levelFinished() {
-		//Log.d("currentlvl", lvl.getName() + " " + lvl.getId());
+		//set level as solved
 		LevelsManager.getInstance().levelFinished(lvl);
+		//[;ay a sound for finished
 		SoundsManager.getInstance().playSound(SoundsManager.ACTION_VICTORY);
+		//diaplsy dialog for the next level or go to menu
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				this.getActivity());
 		Chronometer chr = (Chronometer) getView().findViewById(R.id.chrTimer);
@@ -296,17 +321,18 @@ public class SokobanLevelFragment extends Fragment {
 	 * @param level - the new level to be started
 	 */
 	public void startNewLevel(Level level) {
-		//Log.d("lfinished", level.getName() + "level finished " + level.getId());
 		gl = new GameLevel(level);
 		SokoBoardView sbv = (SokoBoardView) getView().findViewById(
 				R.id.sokoBoardView1);
 		sbv.setGameLevel(gl);
-		// sbv.invalidate();
 		this.lvl = level;
 		getActivity().invalidateOptionsMenu();
 		updateInfo();
 	}
 
+	/**
+	 * on back button undo. this is called from the parrent activity
+	 */
 	public void onBackPressed() {
 		doUndo();
 	}

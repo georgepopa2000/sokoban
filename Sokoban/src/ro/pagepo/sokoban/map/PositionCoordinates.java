@@ -1,5 +1,9 @@
 package ro.pagepo.sokoban.map;
 
+/**
+ * Coordinates of an element on the board
+ *
+ */
 public class PositionCoordinates {
 	public int x;
 	public int y;

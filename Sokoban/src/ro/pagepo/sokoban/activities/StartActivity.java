@@ -1,11 +1,15 @@
 package ro.pagepo.sokoban.activities;
 
+import java.io.File;
+
 import ro.pagepo.sokoban.R;
 import ro.pagepo.sokoban.activities.views.LevelsChooserListAdapter;
 import ro.pagepo.sokoban.database.LevelsDataSource;
 import ro.pagepo.sokoban.database.model.LevelsPack;
 import ro.pagepo.sokoban.levels.ImportLevelsPack;
 import ro.pagepo.sokoban.levels.LevelsManager;
+import ro.pagepo.sokoban.levels.exception.InvalidXMLLevelPackException;
+import ro.pagepo.sokoban.utils.FileDialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -14,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -108,6 +113,30 @@ public class StartActivity extends Activity {
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), SettingsActivity.class);
 					startActivity(intent);
+				}
+			});
+			
+			
+			Button butImport = (Button) rootView.findViewById(R.id.butImport);
+			butImport.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					File mPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+		            FileDialog fileDialog = new FileDialog(PlaceholderFragment.this.getActivity(), mPath);
+		            fileDialog.setFileEndsWith(".txt");
+		            fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+		                public void fileSelected(File file) {
+		                	ImportLevelsPack il = new ImportLevelsPack(PlaceholderFragment.this.getActivity());
+		            		try {
+								il.importLevelsFromFile(file.getAbsolutePath());
+							} catch (InvalidXMLLevelPackException e) {
+								e.printStackTrace();
+							}
+		                    Log.d(getClass().getName(), "selected file " + file.toString());
+		                }
+		            });
+		            fileDialog.showDialog();					
 				}
 			});
 			

@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 import ro.pagepo.sokoban.map.PositionCoordinates;
 
-//should contain the board state at one moment
+/**
+ * Contains the board state at some given moment. Handles the brick (boxes) position and the pack (sokoban man) position 
+  *
+ */
 public class BoardState {
 	ArrayList<PositionCoordinates> brickList = new ArrayList<PositionCoordinates>();	
 	PositionCoordinates pakPosition;
 	
+	//aliases for possible moves
 	public static final int MOVE_LEFT = 1;
 	public static final int MOVE_RIGHT = 2;
 	public static final int MOVE_TOP = 3;
@@ -35,13 +39,21 @@ public class BoardState {
 
 
 
-	//add a movable brick to the list
+	/**
+	 * add a brick
+	 * @param x - x coordinate
+	 * @param y - y coordinate
+	 */
 	public void addBrick(int x,int y){
 		brickList.add(new PositionCoordinates(x, y));
 	}
 	
 	
-	//sets position of the element to be controlled
+	/**
+	 * position of the sokoban
+	 * @param x - x coordinate
+	 * @param y - y coordinate
+	 */
 	public void setPakPosition(int x,int y){
 		pakPosition = new PositionCoordinates(x,y);
 	}
@@ -54,18 +66,38 @@ public class BoardState {
 		return pakPosition.y;
 	}
 	
+	/**
+	 * returns X coordinate for the brick at the index index
+	 * @param index - brick index
+	 * @return x coordinate of the brick
+	 */
 	public int getBrickPositionXAt(int index){
 		return brickList.get(index).x;
 	}
+
+	/**
+	 * returns Y coordinate for the brick at the index index
+	 * @param index - brick index
+	 * @return y coordinate of the brick
+	 */
 	
 	public int getBrickPositionYAt(int index){
 		return brickList.get(index).y;
 	}
 	
+	/**
+	 * number of bricks
+	 * @return the number of bricks
+	 */
 	public int countBricks(){
 		return brickList.size();
 	}
 	
+	/**
+	 * Tries to move to a new position based on the move type and returns the new BoardState after the move
+	 * @param moveType - can be MOVE_LEFT, MOVE_RIGHT etc.
+	 * @return the new BoardState aftre the move
+	 */
 	public BoardState move(int moveType){
 		PositionCoordinates newPakPosition = new PositionCoordinates(pakPosition.x, pakPosition.y);
 		PositionCoordinates newBrickPosition = new PositionCoordinates(pakPosition.x, pakPosition.y);

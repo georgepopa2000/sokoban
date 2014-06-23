@@ -7,11 +7,17 @@ import android.util.Log;
 import ro.pagepo.sokoban.database.model.Level;
 import ro.pagepo.sokoban.map.state.StateElement;
 
-//contains map of the board
+/**
+ * Contains a map of the game board for a level. Only has the StateElemetns not the board state 
+  */
 public class BoardMap {
-	//String string = "xxxxxppppppxxxxxzzzzzzpppzzzzzzzzppppppfpppppppzzppppppppppppppzzppppppfppppzzzzzzzpppppppppzxxxxxzpppppppppzxxxxxzppppppzzzzxxxzzzppppppzxxxxxxzppppppppzzzzzzzzppppppppppppppzzppppppppppppppzzzzzzzzzzppppppzxxxxxxxxzppppppzxxxxxxxxzpppzzzzxxxxxxxxpppppxxx";
 
 	ArrayList<ArrayList<StateElement>> al ;
+	
+	/**
+	 * initialize the map based on the level
+	 * @param level
+	 */
 	public BoardMap(Level level) {
 		al = new ArrayList<ArrayList<StateElement>>();
 		ArrayList<StateElement> alRow;
@@ -37,7 +43,6 @@ public class BoardMap {
 			al.get(row).add(new StateElement(state));
 			
 		}
-		Log.d("asdasd",row+" "+column);
 	}
 	
 	public int getStateElement(int i,int j){

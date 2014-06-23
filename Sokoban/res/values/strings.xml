@@ -10,9 +10,9 @@
     <string name="action_back">Undo</string>
     <string name="action_redo">Redo</string>
     <string name="title_activity_start">StartActivity</string>
-    <string name="title_activity_a">AActivity</string>
     <string name="but_new_game">Start new game</string>
     <string name="but_help">Help</string>
+    <string name="but_import">Import levels pack</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

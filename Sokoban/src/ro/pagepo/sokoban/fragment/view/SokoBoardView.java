@@ -13,10 +13,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
-
+/**
+ * Component View to display the Sokoban game board
+ * @author VS
+ *
+ */
 public class SokoBoardView extends View{
 	
 	private GameLevel gameLevel;
@@ -41,6 +44,11 @@ public class SokoBoardView extends View{
 	Bitmap wallBitmap,floorBitmap,doorBitmap,pakBitmap,brickBitmap,doorBrickBitmap;
 	Rect r;
 
+	/**
+	 * initialize all the drawable needed in onDraw
+	 * @param attrs
+	 * @param defStyle
+	 */
 	private void init(AttributeSet attrs, int defStyle) {
 		p=new Paint(Paint.ANTI_ALIAS_FLAG);
 		p.setColor(Color.rgb(10, 18, 17));
@@ -64,19 +72,17 @@ public class SokoBoardView extends View{
 		int width = measure(widthMeasureSpec);
 		int height = measure(heightMeasureSpec);
 		int d=Math.min(width,height);
-		int newWidth = d;
+		//int newWidth = d;
 		int newHeight = d;
 		
 		if (gameLevel != null) {
 			int wtile = width/gameLevel.getBoardMap().getSizeY();
 			int htile = height/gameLevel.getBoardMap().getSizeX();
 			int tile = Math.min(wtile, htile);
-			newWidth = tile*gameLevel.getBoardMap().getSizeY();
+			//newWidth = tile*gameLevel.getBoardMap().getSizeY();
 			newHeight = tile*gameLevel.getBoardMap().getSizeX();
 		}
 			
-		
-		//Log.d("onmeasure sokoview",newWidth+" "+ newHeight);
 		
 		
 		setMeasuredDimension(width,newHeight);
@@ -84,19 +90,18 @@ public class SokoBoardView extends View{
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		//if the gamelevel not initialised or canvas null then akip draw.
 		if (gameLevel == null) return;
 		if (canvas == null) return;
-		//Log.d("ondraw sokoview",getWidth()+" "+getHeight());
 		super.onDraw(canvas);
-		int size = getBrickSize();	
-		//Log.d("xxx",getWidth()+"");
-		//Log.d("xxx", size+"");
-		//canvas.drawColor(p.getColor());
-		//Log.d("xxx","margins left " +getLeftMargins());
-		int leftMargins = 0;//getLeftMargins();
+		
+		int size = getBrickSize();		
+		int leftMargins = getLeftMargins();
 		if (gameLevel!=null){
 			BoardState boardState = gameLevel.getCurrentBoardState();
 			BoardMap boardMap = gameLevel.getBoardMap();
+			
+			//draw board map based on every ElementState
 			for (int i=0;i<boardMap.getSizeX();i++){
 				for (int j=0;j<boardMap.getSizeY();j++){
 					r.set(leftMargins+size*j, size*i, leftMargins +size*j + size, size*i + size);
@@ -116,6 +121,7 @@ public class SokoBoardView extends View{
 				}
 			}
 			
+			//draw the board state (bricks)
 			for (int i=0;i<boardState.countBricks();i++){
 				int x = boardState.getBrickPositionXAt(i);
 				int y = boardState.getBrickPositionYAt(i);
@@ -124,6 +130,7 @@ public class SokoBoardView extends View{
 				if (state == StateElement.STATE_DOOR)	 canvas.drawBitmap(doorBrickBitmap, null, r, null); 
 					else canvas.drawBitmap(brickBitmap, null, r, null);
 			}
+			//draw the sokoban man
 			int x = boardState.getPakPositionX();
 			int y = boardState.getPakPositionY();
 			r.set(leftMargins + size*y, size*x, leftMargins + size*y + size, size*x + size);
@@ -147,6 +154,10 @@ public class SokoBoardView extends View{
 		return result;
 	}
 	
+	/**
+	 * set the current game level for the component and asks for a redraw.
+	 * @param gl = the new GameLevel
+	 */
 	public void setGameLevel(GameLevel gl){
 		this.gameLevel = gl;
 		this.invalidate();
@@ -160,6 +171,11 @@ public class SokoBoardView extends View{
 		return Math.min((int) Math.round(((double)getWidth())/gameLevel.getBoardMap().getSizeY()),(int) Math.round(((double)getHeight())/gameLevel.getBoardMap().getSizeX()));
 	}
 	
+	/**
+	 * the remaining space that's not used by the board 
+	 * because the last column doesn't fit (rounding) should be split evenly left and right 
+	 * @return the size half of the space remained not used by the board
+	 */
 	private int getLeftMargins(){
 		return Math.round((getWidth()-getBrickSize()*gameLevel.getBoardMap().getSizeY())/2);
 	}

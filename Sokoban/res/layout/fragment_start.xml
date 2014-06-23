@@ -24,6 +24,12 @@
         android:text="@string/action_settings" />
 
     <Button
+        android:id="@+id/butImport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_import" />    
+
+    <Button
         android:id="@+id/butHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
